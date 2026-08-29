@@ -1,0 +1,35 @@
+name: Split Shopify Redirect Fix Map
+
+on:
+  push:
+    paths:
+      - '.github/workflows/split-redirect-fix-map.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Split map into batches
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('redirect-fix-map.json').read_text(encoding='utf-8'))
+          updates = data['updates']
+          for n, start in enumerate(range(0, len(updates), 10), 1):
+              rows = []
+              for item in updates[start:start+10]:
+                  rows.append('\t'.join([item['id'], item['path'], item['new_target']]))
+              Path(f'redirect-fix-batch-{n}.tsv').write_text('\n'.join(rows) + '\n', encoding='utf-8')
+          PY
+      - name: Commit batches
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add redirect-fix-batch-*.tsv
+          git commit -m "Add Shopify redirect fix batches" || exit 0
+          git push
