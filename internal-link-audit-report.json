@@ -1,0 +1,874 @@
+{
+  "summary": {
+    "objects_read": 4961,
+    "products": 2651,
+    "active_products": 2600,
+    "archived_or_other_products": 51,
+    "collections": 130,
+    "published_pages": 20,
+    "published_articles": 170,
+    "redirects": 1973,
+    "content_sources_scanned": 320,
+    "internal_link_occurrences": 1537,
+    "unique_internal_targets": 290,
+    "direct_valid_link_occurrences": 1535,
+    "links_through_redirect_occurrences": 2,
+    "links_through_redirect_unique_targets": 1,
+    "within_collection_product_links": 0,
+    "links_to_archived_products": 0,
+    "locale_prefixed_internal_links": 0,
+    "unknown_internal_link_occurrences": 0,
+    "redirect_chains": 28,
+    "redirect_loops": 0,
+    "redirects_with_unknown_final_target": 16
+  },
+  "by_source": {
+    "redirect_links": {
+      "collection": 2
+    },
+    "unknown_links": {},
+    "archived_links": {},
+    "within_collection_links": {}
+  },
+  "links_through_redirect": [
+    {
+      "source_type": "collection",
+      "source_id": "gid://shopify/Collection/347994947834",
+      "source_title": "Vinyl Window Stickers / Glass Vinyl Decals",
+      "source_path": "/collections/window-stickers-and-decals",
+      "href": "/collections/50-price-discount",
+      "path": "/collections/50-price-discount",
+      "direct_target": "/collections/bird-safe-window-stickers",
+      "final_target": "/collections/bird-safe-window-stickers",
+      "chain_length": 1,
+      "loop": false
+    },
+    {
+      "source_type": "collection",
+      "source_id": "gid://shopify/Collection/672913883474",
+      "source_title": "Window Clings / Privacy, Bird Safety & Seasonal Glass Decals",
+      "source_path": "/collections/retail-window-decals",
+      "href": "/collections/50-price-discount",
+      "path": "/collections/50-price-discount",
+      "direct_target": "/collections/bird-safe-window-stickers",
+      "final_target": "/collections/bird-safe-window-stickers",
+      "chain_length": 1,
+      "loop": false
+    }
+  ],
+  "unknown_internal_links": [],
+  "links_to_archived_products": [],
+  "within_collection_product_links": [],
+  "locale_prefixed_internal_links": [],
+  "redirect_chains": [
+    {
+      "path": "/in-this-house-we-do-second-chances-quote-vinyl-decal-stair-sticker-family-wall-decor-love-sayings-for-stairs-home-word-love-art-decals",
+      "target": "/products/in-this-house-quote-stair-decals-stairs-15716",
+      "final": "/products/in-this-house-family-quote-stair-vinyl-70173",
+      "chain": [
+        "/in-this-house-we-do-second-chances-quote-vinyl-decal-stair-sticker-family-wall-decor-love-sayings-for-stairs-home-word-love-art-decals",
+        "/products/in-this-house-quote-stair-decals-stairs-15716"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/products/motivational-gym-wall-decal-believe-in-yourself-fitness-workout-motivation-quote-sticker-sport-training-vinyl-decor-gym-stickers_1465805610_",
+      "target": "/products/motivational-gym-wall-decal-believe-in-yourself",
+      "final": "/products/motivational-gym-wall-decal-believe-in-05610",
+      "chain": [
+        "/products/motivational-gym-wall-decal-believe-in-yourself-fitness-workout-motivation-quote-sticker-sport-training-vinyl-decor-gym-stickers_1465805610_",
+        "/products/motivational-gym-wall-decal-believe-in-yourself"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/products/blue-and-orange-portal-aura-wall-stickers-transparent-oval-decals-with-vibrant-aura-effect-for-game-room-decor",
+      "target": "/products/blue-and-orange-portal-aura-wall-stickers",
+      "final": "/products/portal-aura-wall-decals",
+      "chain": [
+        "/products/blue-and-orange-portal-aura-wall-stickers-transparent-oval-decals-with-vibrant-aura-effect-for-game-room-decor",
+        "/products/blue-and-orange-portal-aura-wall-stickers"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/de-de/products/believe-in-yourself-stair-vinyl-sticker-self-motivation-love-home-wall-art-you-quote-decal-house-be-family-do-it-endurance-strong-sign",
+      "target": "/products/believe-in-yourself-stair-vinyl-sticker-self-motivation-love-home-wall-art-you-quote-decal-house-be-family-do-it-endurance-strong-sign",
+      "final": "/products/believe-in-yourself-stair-vinyl-sticker-28924",
+      "chain": [
+        "/de-de/products/believe-in-yourself-stair-vinyl-sticker-self-motivation-love-home-wall-art-you-quote-decal-house-be-family-do-it-endurance-strong-sign",
+        "/products/believe-in-yourself-stair-vinyl-sticker-self-motivation-love-home-wall-art-you-quote-decal-house-be-family-do-it-endurance-strong-sign"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/et-ee/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "target": "/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "final": "/products/in-this-house-family-quote-stair-vinyl-70173",
+      "chain": [
+        "/et-ee/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+        "/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/et-ee/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "target": "/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "final": "/products/rabbit-wall-decal",
+      "chain": [
+        "/et-ee/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+        "/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/es-es/products/3d-dinosaurus-art-animal-hole-in-wall-sticker-vinyl-decor-broken-illusion-peel-and-stick-decal-porthole-crack-print-diy-cracked-mural",
+      "target": "/products/3d-dinosaurus-art-animal-hole-in-wall-sticker-vinyl-decor-broken-illusion-peel-and-stick-decal-porthole-crack-print-diy-cracked-mural",
+      "final": "/products/dinosaur-wall-porthole-decal",
+      "chain": [
+        "/es-es/products/3d-dinosaurus-art-animal-hole-in-wall-sticker-vinyl-decor-broken-illusion-peel-and-stick-decal-porthole-crack-print-diy-cracked-mural",
+        "/products/3d-dinosaurus-art-animal-hole-in-wall-sticker-vinyl-decor-broken-illusion-peel-and-stick-decal-porthole-crack-print-diy-cracked-mural"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/es-es/products/3d-effect-blue-sea-wall-sticker-porthole-view-floor-art-decor-ocean-printed-vinyl-decal-stick-photo-water-gift-hole-mural",
+      "target": "/products/3d-effect-blue-sea-wall-sticker-porthole-view-floor-art-decor-ocean-printed-vinyl-decal-stick-photo-water-gift-hole-mural",
+      "final": "/products/blue-ocean-porthole-wall-decal",
+      "chain": [
+        "/es-es/products/3d-effect-blue-sea-wall-sticker-porthole-view-floor-art-decor-ocean-printed-vinyl-decal-stick-photo-water-gift-hole-mural",
+        "/products/3d-effect-blue-sea-wall-sticker-porthole-view-floor-art-decor-ocean-printed-vinyl-decal-stick-photo-water-gift-hole-mural"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "target": "/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "final": "/products/tiger-porthole-wall-decal",
+      "chain": [
+        "/fr-fr/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+        "/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/es-es/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "target": "/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "final": "/products/rabbit-wall-decal",
+      "chain": [
+        "/es-es/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+        "/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/es-es/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "target": "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "final": "/products/in-this-house-family-glow-in-dark-quote-12877",
+      "chain": [
+        "/es-es/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+        "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/3d-fire-car-wall-sticker-dynamic-crack-auto-in-hole-art-decal-boys-bedroom-broken-smashed-wall-vehicle-mural-decor-sports-car-sticker",
+      "target": "/products/3d-fire-car-wall-sticker-dynamic-crack-auto-in-hole-art-decal-boys-bedroom-broken-smashed-wall-vehicle-mural-decor-sports-car-sticker",
+      "final": "/products/fire-race-car-wall-decal",
+      "chain": [
+        "/fr-fr/products/3d-fire-car-wall-sticker-dynamic-crack-auto-in-hole-art-decal-boys-bedroom-broken-smashed-wall-vehicle-mural-decor-sports-car-sticker",
+        "/products/3d-fire-car-wall-sticker-dynamic-crack-auto-in-hole-art-decal-boys-bedroom-broken-smashed-wall-vehicle-mural-decor-sports-car-sticker"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/es-es/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-1",
+      "target": "/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-1",
+      "final": "/products/cloud-galaxy-bridge-floor-decal",
+      "chain": [
+        "/es-es/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-1",
+        "/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-1"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "target": "/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "final": "/products/in-this-house-family-quote-stair-vinyl-70173",
+      "chain": [
+        "/fr-fr/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+        "/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/50x-honeycomb-wall-decals-decor-geometric-hexagon-sticker-for-bedroom-living-room-gold-vinyl-decal-adhesive-honey-comb-bee-cell-stickers",
+      "target": "/products/50x-honeycomb-wall-stickers-decor-50849",
+      "final": "/products/50x-honeycomb-wall-decals-decor-51473",
+      "chain": [
+        "/fr-fr/products/50x-honeycomb-wall-decals-decor-geometric-hexagon-sticker-for-bedroom-living-room-gold-vinyl-decal-adhesive-honey-comb-bee-cell-stickers",
+        "/products/50x-honeycomb-wall-stickers-decor-50849"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/de-de/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "target": "/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "final": "/products/octopus-tentacles-vinyl-wall-art-sticker-29143",
+      "chain": [
+        "/de-de/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+        "/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/gym-quote-wall-decal-sweat-is-the-fuel-fitness-workout-motivation-sticker-sport-champion-training-motivational-vinyl-decor-stickers_1480026681_",
+      "target": "/products/gym-quote-wall-decal-sweat-is-the-fuel-fitness-workout-motivation-sticker-sport-champion-training-motivational-vinyl-decor-stickers_1480026681_",
+      "final": "/products/gym-quote-wall-decal-sweat-is-the-fuel-26681",
+      "chain": [
+        "/fr-fr/products/gym-quote-wall-decal-sweat-is-the-fuel-fitness-workout-motivation-sticker-sport-champion-training-motivational-vinyl-decor-stickers_1480026681_",
+        "/products/gym-quote-wall-decal-sweat-is-the-fuel-fitness-workout-motivation-sticker-sport-champion-training-motivational-vinyl-decor-stickers_1480026681_"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/et-ee/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "target": "/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "final": "/products/octopus-tentacles-vinyl-wall-art-sticker-29143",
+      "chain": [
+        "/et-ee/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+        "/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/de-de/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "target": "/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "final": "/products/blue-blossom-wall-decal",
+      "chain": [
+        "/de-de/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+        "/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/et-ee/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "target": "/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "final": "/products/tiger-porthole-wall-decal",
+      "chain": [
+        "/et-ee/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+        "/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/de-de/products/bodybuilding-wall-gym-vinyl-sticker-fitness-decor-workout-decal-bodybuild-bodybuilder-quote-decals-bodibuilding-training-sport-murals",
+      "target": "/products/bodybuilding-wall-gym-vinyl-sticker-fitness-decor-workout-decal-bodybuild-bodybuilder-quote-decals-bodibuilding-training-sport-murals",
+      "final": "/products/bodybuilding-wall-gym-vinyl-sticker-80135",
+      "chain": [
+        "/de-de/products/bodybuilding-wall-gym-vinyl-sticker-fitness-decor-workout-decal-bodybuild-bodybuilder-quote-decals-bodibuilding-training-sport-murals",
+        "/products/bodybuilding-wall-gym-vinyl-sticker-fitness-decor-workout-decal-bodybuild-bodybuilder-quote-decals-bodibuilding-training-sport-murals"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "target": "/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "final": "/products/blue-blossom-wall-decal",
+      "chain": [
+        "/fr-fr/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+        "/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/de-de/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "target": "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "final": "/products/in-this-house-family-glow-in-dark-quote-12877",
+      "chain": [
+        "/de-de/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+        "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "target": "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "final": "/products/in-this-house-family-glow-in-dark-quote-12877",
+      "chain": [
+        "/fr-fr/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+        "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/et-ee/products/50x-honeycomb-wall-decals-decor-geometric-hexagon-sticker-for-bedroom-living-room-gold-vinyl-decal-adhesive-honey-comb-bee-cell-stickers",
+      "target": "/products/50x-honeycomb-wall-stickers-decor-50849",
+      "final": "/products/50x-honeycomb-wall-decals-decor-51473",
+      "chain": [
+        "/et-ee/products/50x-honeycomb-wall-decals-decor-geometric-hexagon-sticker-for-bedroom-living-room-gold-vinyl-decal-adhesive-honey-comb-bee-cell-stickers",
+        "/products/50x-honeycomb-wall-stickers-decor-50849"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/fr-fr/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-4",
+      "target": "/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-4",
+      "final": "/products/purple-galaxy-bridge-floor-decal",
+      "chain": [
+        "/fr-fr/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-4",
+        "/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-4"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/products/captivating-3d-illusion-hole-48548",
+      "target": "/products/captivating-3d-illusion-hole-floor-48548",
+      "final": "/products/basement-hole-floor-decal-design-1",
+      "chain": [
+        "/products/captivating-3d-illusion-hole-48548",
+        "/products/captivating-3d-illusion-hole-floor-48548"
+      ],
+      "loop": false,
+      "external": false
+    },
+    {
+      "path": "/products/3d-printed-mushroom-hamster-hideout-cute-89766",
+      "target": "/products/3d-printed-mushroom-hamster-hideout-small-pet-shelter",
+      "final": "/products/3d-printed-mushroom-small-pet-hideout",
+      "chain": [
+        "/products/3d-printed-mushroom-hamster-hideout-cute-89766",
+        "/products/3d-printed-mushroom-hamster-hideout-small-pet-shelter"
+      ],
+      "loop": false,
+      "external": false
+    }
+  ],
+  "redirect_loops": [],
+  "redirects_with_unknown_final_target": [
+    {
+      "path": "/products/bathroom-decor-door-vinyl-decals-funny-bath-room-art-for-shower-doors-cute-ideas-kids-stickers-prints-home-themes-fun-glass-murals-1?currency=usd&variant=41933936558330",
+      "target": "/collections/door-stickers",
+      "final_target": "/collections/door-stickers",
+      "chain_length": 1
+    },
+    {
+      "path": "/de-de/blogs/news?%3f-unleash-your-inner-artist-with-diy-decorations",
+      "target": "/blogs/craft-with-decords/%F0%9F%8E%A8-unleash-your-inner-artist-with-diy-decorations",
+      "final_target": "/blogs/craft-with-decords/%F0%9F%8E%A8-unleash-your-inner-artist-with-diy-decorations",
+      "chain_length": 1
+    },
+    {
+      "path": "/ru/bathroom-decor-door-vinyl-decals-funny-bath-room-art-for-shower-doors-cute-ideas-kids-stickers-prints-home-themes-fun-glass-murals-6-2",
+      "target": "/collections/door-stickers",
+      "final_target": "/collections/door-stickers",
+      "chain_length": 1
+    },
+    {
+      "path": "/blogs/news/%f0%9f%8e%a8-unleash-your-inner-artist-with-diy-decorations",
+      "target": "/blogs/craft-with-decords/%F0%9F%8E%A8-unleash-your-inner-artist-with-diy-decorations",
+      "final_target": "/blogs/craft-with-decords/%F0%9F%8E%A8-unleash-your-inner-artist-with-diy-decorations",
+      "chain_length": 1
+    },
+    {
+      "path": "/de/products/weird-cowboy-frog-wall-vinyl-decal-14179-kybs",
+      "target": "/de/products/weird-cowboy-frog-wall-vinyl-decal-14179",
+      "final_target": "/de/products/weird-cowboy-frog-wall-vinyl-decal-14179",
+      "chain_length": 1
+    },
+    {
+      "path": "/et/products/weird-cowboy-frog-wall-vinyl-decal-14179-kybs",
+      "target": "/et/products/weird-cowboy-frog-wall-vinyl-decal-14179",
+      "final_target": "/et/products/weird-cowboy-frog-wall-vinyl-decal-14179",
+      "chain_length": 1
+    },
+    {
+      "path": "/de/products/weird-lemonade-frog-wall-vinyl-decal-33094-1sls",
+      "target": "/de/products/weird-lemonade-frog-wall-vinyl-decal-33094",
+      "final_target": "/de/products/weird-lemonade-frog-wall-vinyl-decal-33094",
+      "chain_length": 1
+    },
+    {
+      "path": "/et/products/weird-lemonade-frog-wall-vinyl-decal-33094-1sls",
+      "target": "/et/products/weird-lemonade-frog-wall-vinyl-decal-33094",
+      "final_target": "/et/products/weird-lemonade-frog-wall-vinyl-decal-33094",
+      "chain_length": 1
+    },
+    {
+      "path": "/de/products/weird-chef-frogs-wall-vinyl-decal-funny-37892-5p8e",
+      "target": "/de/products/weird-chef-frogs-wall-vinyl-decal-funny-37892",
+      "final_target": "/de/products/weird-chef-frogs-wall-vinyl-decal-funny-37892",
+      "chain_length": 1
+    },
+    {
+      "path": "/et/products/weird-chef-frogs-wall-vinyl-decal-funny-37892-5p8e",
+      "target": "/et/products/weird-chef-frogs-wall-vinyl-decal-funny-37892",
+      "final_target": "/et/products/weird-chef-frogs-wall-vinyl-decal-funny-37892",
+      "chain_length": 1
+    },
+    {
+      "path": "/de/products/wolf-in-hoodie-wall-vinyl-decal-black-55316-b4zj",
+      "target": "/de/products/wolf-in-hoodie-wall-vinyl-decal-black-55316",
+      "final_target": "/de/products/wolf-in-hoodie-wall-vinyl-decal-black-55316",
+      "chain_length": 1
+    },
+    {
+      "path": "/et/products/wolf-in-hoodie-wall-vinyl-decal-black-55316-b4zj",
+      "target": "/et/products/wolf-in-hoodie-wall-vinyl-decal-black-55316",
+      "final_target": "/et/products/wolf-in-hoodie-wall-vinyl-decal-black-55316",
+      "chain_length": 1
+    },
+    {
+      "path": "/de/products/lion-in-hoodie-wall-vinyl-decal-67480-ufos",
+      "target": "/de/products/lion-in-hoodie-wall-vinyl-decal-67480",
+      "final_target": "/de/products/lion-in-hoodie-wall-vinyl-decal-67480",
+      "chain_length": 1
+    },
+    {
+      "path": "/et/products/lion-in-hoodie-wall-vinyl-decal-67480-ufos",
+      "target": "/et/products/lion-in-hoodie-wall-vinyl-decal-67480",
+      "final_target": "/et/products/lion-in-hoodie-wall-vinyl-decal-67480",
+      "chain_length": 1
+    },
+    {
+      "path": "/de/products/tiger-in-hoodie-wall-vinyl-decal-gamer-64927-cxts",
+      "target": "/de/products/tiger-in-hoodie-wall-vinyl-decal-gamer-64927",
+      "final_target": "/de/products/tiger-in-hoodie-wall-vinyl-decal-gamer-64927",
+      "chain_length": 1
+    },
+    {
+      "path": "/et/products/tiger-in-hoodie-wall-vinyl-decal-gamer-64927-cxts",
+      "target": "/et/products/tiger-in-hoodie-wall-vinyl-decal-gamer-64927",
+      "final_target": "/et/products/tiger-in-hoodie-wall-vinyl-decal-gamer-64927",
+      "chain_length": 1
+    }
+  ],
+  "top_internal_targets": [
+    [
+      "/collections/wall-stickers",
+      57
+    ],
+    [
+      "/collections/custom-personalized",
+      55
+    ],
+    [
+      "/blogs/craft-with-decords/wall-art",
+      28
+    ],
+    [
+      "/blogs/craft-with-decords/wall-lettering",
+      24
+    ],
+    [
+      "/blogs/craft-with-decords/vinyl-stickers",
+      23
+    ],
+    [
+      "/collections/custom-quote-sticker",
+      23
+    ],
+    [
+      "/collections/kids-room",
+      19
+    ],
+    [
+      "/blogs/craft-with-decords/event-decoration-decals",
+      19
+    ],
+    [
+      "/collections/nature-plants",
+      18
+    ],
+    [
+      "/blogs/craft-with-decords/wall-murals",
+      18
+    ],
+    [
+      "/collections/custom-logo",
+      17
+    ],
+    [
+      "/blogs/craft-with-decords/shop-front-decals",
+      17
+    ],
+    [
+      "/collections/car-stickers-truck-decals-vehicle-bumper-stickers",
+      16
+    ],
+    [
+      "/collections/custom-window-decal",
+      16
+    ],
+    [
+      "/collections/baby-room",
+      16
+    ],
+    [
+      "/blogs/craft-with-decords/business-stickers",
+      15
+    ],
+    [
+      "/collections/animals-birds",
+      15
+    ],
+    [
+      "/collections/window-stickers-and-decals",
+      14
+    ],
+    [
+      "/collections/business-vinyl-decals",
+      14
+    ],
+    [
+      "/collections/nursery",
+      14
+    ],
+    [
+      "/blogs/craft-with-decords/custom-design-service",
+      14
+    ],
+    [
+      "/collections/wallpapers-1",
+      14
+    ],
+    [
+      "/collections/birthday",
+      14
+    ],
+    [
+      "/collections/geometric-abstract",
+      14
+    ],
+    [
+      "/pages/contact-us",
+      14
+    ],
+    [
+      "/collections/custom-orders",
+      13
+    ],
+    [
+      "/blogs/craft-with-decords/top-10-apply-wall-decals-mistakes",
+      13
+    ],
+    [
+      "/collections/living-room",
+      13
+    ],
+    [
+      "/collections/unique-3d-printed-home-decor-products-gifts",
+      13
+    ],
+    [
+      "/collections/stickers-and-decals",
+      12
+    ],
+    [
+      "/blogs/craft-with-decords/window-stickers",
+      11
+    ],
+    [
+      "/blogs/craft-with-decords/kids-room-stickers",
+      11
+    ],
+    [
+      "/blogs/craft-with-decords/geometric-wall-stickers",
+      11
+    ],
+    [
+      "/collections/custom-car-stickers",
+      11
+    ],
+    [
+      "/pages/refund-policy",
+      11
+    ],
+    [
+      "/blogs/craft-with-decords/the-ultimate-guide-to-choosing-the-perfect-wall-decal-for-your-home",
+      10
+    ],
+    [
+      "/collections/kitchen",
+      10
+    ],
+    [
+      "/collections/bedroom",
+      10
+    ],
+    [
+      "/collections/office",
+      10
+    ],
+    [
+      "/blogs/craft-with-decords/wall-decals-blog",
+      10
+    ],
+    [
+      "/blogs/craft-with-decords/personalized-wall-decals",
+      10
+    ],
+    [
+      "/blogs/craft-with-decords/how-to-measure-for-decals-window-film-murals-3d-decor",
+      9
+    ],
+    [
+      "/collections/frosted-etched-stickers",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/decal-printing",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/home-decoration",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/wall-decal-manufacturer",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/seasonal-wall-stickers",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/car-decals-guide",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/floral-wall-stickers",
+      9
+    ],
+    [
+      "/collections/space-astronomy",
+      9
+    ],
+    [
+      "/collections/game-room",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/graphic-wall-design",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/custom-wall-art",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/printed-wall-art",
+      9
+    ],
+    [
+      "/blogs/craft-with-decords/car-decals",
+      9
+    ],
+    [
+      "/pages/shipping-policy",
+      9
+    ],
+    [
+      "/collections/glass-window-signage",
+      8
+    ],
+    [
+      "/blogs/craft-with-decords/learn-how-to-easily-apply-wall-sticker-designs-with-this-comprehensive-step-by-step-guide",
+      8
+    ],
+    [
+      "/blogs/craft-with-decords/safe-non-toxic-baby-room-wall-decals",
+      8
+    ],
+    [
+      "/collections/stickers-for-events",
+      8
+    ],
+    [
+      "/collections/wall-posters",
+      8
+    ],
+    [
+      "/blogs/craft-with-decords/removable-wallpaper",
+      8
+    ],
+    [
+      "/collections/fantasy-mythology",
+      8
+    ],
+    [
+      "/blogs/craft-with-decords/creating-stunning-window-display-decords-vinyl-decals",
+      8
+    ],
+    [
+      "/blogs/craft-with-decords/3d-printed-products-business",
+      8
+    ],
+    [
+      "/collections/3d-floor-decals-vinyl-floor-stickers",
+      7
+    ],
+    [
+      "/collections/packaging-stickers",
+      7
+    ],
+    [
+      "/collections/business-launch",
+      7
+    ],
+    [
+      "/collections/window-signs-for-business",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/privacy-window-film-guide",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/logo-stickers",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/educational-wall-stickers",
+      7
+    ],
+    [
+      "/collections/3d-stickers",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/diy-wall-decor",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/space-wall-decor",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/nature-wall-decals",
+      7
+    ],
+    [
+      "/collections/patterns-textures",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/bespoke-wall-decals",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/map-wall-decals",
+      7
+    ],
+    [
+      "/blogs/craft-with-decords/architectural-elements",
+      7
+    ],
+    [
+      "/collections/bulk-stickers",
+      7
+    ],
+    [
+      "/collections/service-stickers",
+      6
+    ],
+    [
+      "/collections/wallpaper-stickers",
+      6
+    ],
+    [
+      "/blogs/craft-with-decords/discover-how-3d-wall-stickers-can-completely-transform-your-home-decor",
+      6
+    ],
+    [
+      "/blogs/craft-with-decords/wall-decor-ideas",
+      6
+    ],
+    [
+      "/blogs/craft-with-decords/peel-and-stick-wallpaper",
+      6
+    ],
+    [
+      "/collections/car-business-decals",
+      6
+    ],
+    [
+      "/pages/privacy-policy",
+      6
+    ],
+    [
+      "/pages/terms-and-conditions",
+      6
+    ],
+    [
+      "/collections/home-renovation",
+      5
+    ],
+    [
+      "/collections/retail-window-decals",
+      5
+    ],
+    [
+      "/collections/bestsellers",
+      5
+    ],
+    [
+      "/collections/craft-room",
+      5
+    ],
+    [
+      "/collections/wedding",
+      5
+    ],
+    [
+      "/collections/surprise-party",
+      5
+    ],
+    [
+      "/collections/boys-room",
+      5
+    ],
+    [
+      "/collections/bathroom",
+      5
+    ],
+    [
+      "/blogs/craft-with-decords/a-buyers-guide-to-nursery-wall-decals-transform-your-babys-room-in-2026",
+      5
+    ],
+    [
+      "/collections/literary-quotes",
+      5
+    ],
+    [
+      "/collections/christmas",
+      5
+    ]
+  ]
+}
