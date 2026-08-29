@@ -1,0 +1,48 @@
+name: Summarize Decords Internal Link Audit
+
+on:
+  push:
+    paths:
+      - '.github/workflows/summarize-internal-link-audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create compact findings
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path('internal-link-audit-report.json').read_text(encoding='utf-8'))
+          lines = []
+          lines.append('SUMMARY\t' + json.dumps(report['summary'], ensure_ascii=False, separators=(',', ':')))
+          for item in report.get('links_through_redirect', []):
+              lines.append('CONTENT_REDIRECT\t' + '\t'.join([
+                  item.get('source_type',''), item.get('source_id',''), item.get('source_path',''),
+                  item.get('path',''), str(item.get('final_target',''))
+              ]))
+          for item in report.get('redirect_chains', []):
+              lines.append('REDIRECT_CHAIN\t' + '\t'.join([
+                  item.get('path',''), str(item.get('target','')), str(item.get('final','')),
+                  str(len(item.get('chain') or []))
+              ]))
+          for item in report.get('redirects_with_unknown_final_target', []):
+              lines.append('UNKNOWN_TARGET\t' + '\t'.join([
+                  item.get('path',''), str(item.get('target','')), str(item.get('final_target','')),
+                  str(item.get('chain_length',''))
+              ]))
+          Path('internal-link-audit-findings.tsv').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          PY
+      - name: Commit compact findings
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add internal-link-audit-findings.tsv
+          git commit -m "Add compact internal link audit findings" || exit 0
+          git push
