@@ -1,0 +1,70 @@
+name: Build Shopify Redirect Fix Map
+
+on:
+  push:
+    paths:
+      - '.github/workflows/build-redirect-fix-map.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build redirect update map
+        env:
+          EXPORT_URL: https://cdn.shopify.com/s/files/1/0608/0888/8570/files/2659bf64d7d626c169832eb6ac68?v=1787930621
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from pathlib import Path
+
+          report = json.loads(Path('internal-link-audit-report.json').read_text(encoding='utf-8'))
+          desired = {}
+          for item in report.get('redirect_chains', []):
+              desired[item['path']] = item['final']
+          for item in report.get('redirects_with_unknown_final_target', []):
+              if item.get('target') == '/collections/door-stickers':
+                  desired[item['path']] = '/collections/bathroom'
+
+          records = {}
+          req = urllib.request.Request(os.environ['EXPORT_URL'], headers={'User-Agent':'DecordsTechnicalAudit/1.0'})
+          with urllib.request.urlopen(req, timeout=120) as response:
+              for raw in response:
+                  if not raw.strip():
+                      continue
+                  obj = json.loads(raw)
+                  if obj.get('__typename') == 'UrlRedirect' and obj.get('path') in desired:
+                      records[obj['path']] = {
+                          'id': obj['id'],
+                          'path': obj['path'],
+                          'old_target': obj.get('target') or '',
+                          'new_target': desired[obj['path']],
+                      }
+
+          missing = sorted(set(desired) - set(records))
+          output = {
+              'summary': {
+                  'requested': len(desired),
+                  'mapped': len(records),
+                  'missing': len(missing),
+                  'chain_updates': len(report.get('redirect_chains', [])),
+                  'bad_target_updates': sum(1 for i in report.get('redirects_with_unknown_final_target', []) if i.get('target') == '/collections/door-stickers'),
+              },
+              'updates': [records[path] for path in sorted(records)],
+              'missing_paths': missing,
+          }
+          Path('redirect-fix-map.json').write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding='utf-8')
+          print(json.dumps(output['summary'], ensure_ascii=False))
+          PY
+      - name: Commit redirect fix map
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add redirect-fix-map.json
+          git commit -m "Add exact Shopify redirect fix map" || exit 0
+          git push
