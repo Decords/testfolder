@@ -1,0 +1,192 @@
+{
+  "summary": {
+    "requested": 30,
+    "mapped": 30,
+    "missing": 0,
+    "chain_updates": 28,
+    "bad_target_updates": 2
+  },
+  "updates": [
+    {
+      "id": "gid://shopify/UrlRedirect/1498686587218",
+      "path": "/de-de/products/believe-in-yourself-stair-vinyl-sticker-self-motivation-love-home-wall-art-you-quote-decal-house-be-family-do-it-endurance-strong-sign",
+      "old_target": "/products/believe-in-yourself-stair-vinyl-sticker-self-motivation-love-home-wall-art-you-quote-decal-house-be-family-do-it-endurance-strong-sign",
+      "new_target": "/products/believe-in-yourself-stair-vinyl-sticker-28924"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498716373330",
+      "path": "/de-de/products/bodybuilding-wall-gym-vinyl-sticker-fitness-decor-workout-decal-bodybuild-bodybuilder-quote-decals-bodibuilding-training-sport-murals",
+      "old_target": "/products/bodybuilding-wall-gym-vinyl-sticker-fitness-decor-workout-decal-bodybuild-bodybuilder-quote-decals-bodibuilding-training-sport-murals",
+      "new_target": "/products/bodybuilding-wall-gym-vinyl-sticker-80135"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498712703314",
+      "path": "/de-de/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "old_target": "/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "new_target": "/products/blue-blossom-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498716930386",
+      "path": "/de-de/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "old_target": "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "new_target": "/products/in-this-house-family-glow-in-dark-quote-12877"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498704183634",
+      "path": "/de-de/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "old_target": "/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "new_target": "/products/octopus-tentacles-vinyl-wall-art-sticker-29143"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498689143122",
+      "path": "/es-es/products/3d-dinosaurus-art-animal-hole-in-wall-sticker-vinyl-decor-broken-illusion-peel-and-stick-decal-porthole-crack-print-diy-cracked-mural",
+      "old_target": "/products/3d-dinosaurus-art-animal-hole-in-wall-sticker-vinyl-decor-broken-illusion-peel-and-stick-decal-porthole-crack-print-diy-cracked-mural",
+      "new_target": "/products/dinosaur-wall-porthole-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498690388306",
+      "path": "/es-es/products/3d-effect-blue-sea-wall-sticker-porthole-view-floor-art-decor-ocean-printed-vinyl-decal-stick-photo-water-gift-hole-mural",
+      "old_target": "/products/3d-effect-blue-sea-wall-sticker-porthole-view-floor-art-decor-ocean-printed-vinyl-decal-stick-photo-water-gift-hole-mural",
+      "new_target": "/products/blue-ocean-porthole-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498693108050",
+      "path": "/es-es/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "old_target": "/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "new_target": "/products/rabbit-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498698678610",
+      "path": "/es-es/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-1",
+      "old_target": "/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-1",
+      "new_target": "/products/cloud-galaxy-bridge-floor-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498695926098",
+      "path": "/es-es/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "old_target": "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "new_target": "/products/in-this-house-family-glow-in-dark-quote-12877"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498688520530",
+      "path": "/et-ee/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "old_target": "/products/3d-rabbit-wall-decal-easter-bunny-kid-design-sticker-adhesive-decoration-decals-cute-kitchen-vinyl-toilet-nursery-decor-mural",
+      "new_target": "/products/rabbit-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498715423058",
+      "path": "/et-ee/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "old_target": "/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "new_target": "/products/tiger-porthole-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498717061458",
+      "path": "/et-ee/products/50x-honeycomb-wall-decals-decor-geometric-hexagon-sticker-for-bedroom-living-room-gold-vinyl-decal-adhesive-honey-comb-bee-cell-stickers",
+      "old_target": "/products/50x-honeycomb-wall-stickers-decor-50849",
+      "new_target": "/products/50x-honeycomb-wall-decals-decor-51473"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498687471954",
+      "path": "/et-ee/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "old_target": "/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "new_target": "/products/in-this-house-family-quote-stair-vinyl-70173"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498712572242",
+      "path": "/et-ee/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "old_target": "/products/octopus-tentacle-vinyl-wall-art-sticker-bathroom-ocean-giant-sea-animal-lover-decor-die-cut-decal-squid-life-creature-kraken-silhouette-1",
+      "new_target": "/products/octopus-tentacles-vinyl-wall-art-sticker-29143"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498697498962",
+      "path": "/fr-fr/products/3d-fire-car-wall-sticker-dynamic-crack-auto-in-hole-art-decal-boys-bedroom-broken-smashed-wall-vehicle-mural-decor-sports-car-sticker",
+      "old_target": "/products/3d-fire-car-wall-sticker-dynamic-crack-auto-in-hole-art-decal-boys-bedroom-broken-smashed-wall-vehicle-mural-decor-sports-car-sticker",
+      "new_target": "/products/fire-race-car-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1499884159314",
+      "path": "/fr-fr/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-4",
+      "old_target": "/products/3d-space-bridge-floor-vinyl-decal-bathroom-living-room-flooring-galaxy-decals-stick-peel-decor-stickers-decoration-kids-classroom-sticker-4",
+      "new_target": "/products/purple-galaxy-bridge-floor-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498690715986",
+      "path": "/fr-fr/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "old_target": "/products/3d-tiger-sticker-tiger-porthole-decoration-wall-decal-for-bedroom-boy-room-optical-illusion-of-crack-the-peel-and-stick-kid-art",
+      "new_target": "/products/tiger-porthole-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498701398354",
+      "path": "/fr-fr/products/50x-honeycomb-wall-decals-decor-geometric-hexagon-sticker-for-bedroom-living-room-gold-vinyl-decal-adhesive-honey-comb-bee-cell-stickers",
+      "old_target": "/products/50x-honeycomb-wall-stickers-decor-50849",
+      "new_target": "/products/50x-honeycomb-wall-decals-decor-51473"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498716766546",
+      "path": "/fr-fr/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "old_target": "/products/floral-wall-vinyl-sticker-mural-3d-blue-flowers-stick-peel-living-room-decor-decal-furniture-bathroom-blossom-art-transfers-wallpaper",
+      "new_target": "/products/blue-blossom-wall-decal"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498709098834",
+      "path": "/fr-fr/products/gym-quote-wall-decal-sweat-is-the-fuel-fitness-workout-motivation-sticker-sport-champion-training-motivational-vinyl-decor-stickers_1480026681_",
+      "old_target": "/products/gym-quote-wall-decal-sweat-is-the-fuel-fitness-workout-motivation-sticker-sport-champion-training-motivational-vinyl-decor-stickers_1480026681_",
+      "new_target": "/products/gym-quote-wall-decal-sweat-is-the-fuel-26681"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498716963154",
+      "path": "/fr-fr/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "old_target": "/products/in-this-house-family-glow-in-dark-quote-stair-sticker-night-glowing-we-do-and-home-rule-vinyl-decal-realistic-luminescent-light-ghost",
+      "new_target": "/products/in-this-house-family-glow-in-dark-quote-12877"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498700874066",
+      "path": "/fr-fr/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "old_target": "/products/in-this-house-quote-stair-decals-stairs-decal-quotes-vinyl-stickers-staircase-step-riser-sticker-stairway-sayings-family-for-home",
+      "new_target": "/products/in-this-house-family-quote-stair-vinyl-70173"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1083079885138",
+      "path": "/in-this-house-we-do-second-chances-quote-vinyl-decal-stair-sticker-family-wall-decor-love-sayings-for-stairs-home-word-love-art-decals",
+      "old_target": "/products/in-this-house-quote-stair-decals-stairs-15716",
+      "new_target": "/products/in-this-house-family-quote-stair-vinyl-70173"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1746997018962",
+      "path": "/products/3d-printed-mushroom-hamster-hideout-cute-89766",
+      "old_target": "/products/3d-printed-mushroom-hamster-hideout-small-pet-shelter",
+      "new_target": "/products/3d-printed-mushroom-small-pet-hideout"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498711130450",
+      "path": "/products/bathroom-decor-door-vinyl-decals-funny-bath-room-art-for-shower-doors-cute-ideas-kids-stickers-prints-home-themes-fun-glass-murals-1?currency=usd&variant=41933936558330",
+      "old_target": "/collections/door-stickers",
+      "new_target": "/collections/bathroom"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1429733671250",
+      "path": "/products/blue-and-orange-portal-aura-wall-stickers-transparent-oval-decals-with-vibrant-aura-effect-for-game-room-decor",
+      "old_target": "/products/blue-and-orange-portal-aura-wall-stickers",
+      "new_target": "/products/portal-aura-wall-decals"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1567452332370",
+      "path": "/products/captivating-3d-illusion-hole-48548",
+      "old_target": "/products/captivating-3d-illusion-hole-floor-48548",
+      "new_target": "/products/basement-hole-floor-decal-design-1"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1105257857362",
+      "path": "/products/motivational-gym-wall-decal-believe-in-yourself-fitness-workout-motivation-quote-sticker-sport-training-vinyl-decor-gym-stickers_1465805610_",
+      "old_target": "/products/motivational-gym-wall-decal-believe-in-yourself",
+      "new_target": "/products/motivational-gym-wall-decal-believe-in-05610"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498713850194",
+      "path": "/ru/bathroom-decor-door-vinyl-decals-funny-bath-room-art-for-shower-doors-cute-ideas-kids-stickers-prints-home-themes-fun-glass-murals-6-2",
+      "old_target": "/collections/door-stickers",
+      "new_target": "/collections/bathroom"
+    }
+  ],
+  "missing_paths": []
+}
