@@ -1,0 +1,329 @@
+name: Decords Internal Link Audit
+
+on:
+  push:
+    paths:
+      - '.github/workflows/internal-link-audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Analyze Shopify content and redirects
+        env:
+          EXPORT_URL: https://cdn.shopify.com/s/files/1/0608/0888/8570/files/2659bf64d7d626c169832eb6ac68?v=1787930621
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import urllib.request
+          from collections import Counter, defaultdict
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin, urlsplit
+
+          EXPORT_URL = os.environ['EXPORT_URL']
+          BASE = 'https://www.decords.com'
+          INTERNAL_HOSTS = {'decords.com', 'www.decords.com'}
+          LOCALES = {'en', 'de', 'et', 'ru', 'fr', 'es'}
+
+          class LinkParser(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True)
+                  self.links = []
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() != 'a':
+                      return
+                  values = dict(attrs)
+                  href = values.get('href')
+                  if href:
+                      self.links.append(href.strip())
+
+          def links_from_html(html):
+              if not html:
+                  return []
+              parser = LinkParser()
+              try:
+                  parser.feed(html)
+              except Exception:
+                  return re.findall(r'''href\s*=\s*["']([^"']+)["']''', html, flags=re.I)
+              return parser.links
+
+          def normalize_internal(href):
+              if not href or href.startswith(('#', 'mailto:', 'tel:', 'javascript:', 'data:')):
+                  return None
+              try:
+                  parsed = urlsplit(urljoin(BASE + '/', href))
+              except Exception:
+                  return None
+              host = (parsed.hostname or '').lower()
+              if host not in INTERNAL_HOSTS:
+                  return None
+              path = re.sub(r'/+', '/', parsed.path or '/')
+              if path != '/' and path.endswith('/'):
+                  path = path[:-1]
+              return path or '/'
+
+          def strip_locale(path):
+              parts = path.split('/')
+              if len(parts) > 2 and parts[1] in LOCALES:
+                  return '/' + '/'.join(parts[2:])
+              return path
+
+          req = urllib.request.Request(EXPORT_URL, headers={'User-Agent': 'DecordsTechnicalAudit/1.0'})
+          objects = []
+          with urllib.request.urlopen(req, timeout=120) as response:
+              for raw in response:
+                  raw = raw.strip()
+                  if raw:
+                      objects.append(json.loads(raw))
+
+          products = []
+          collections = []
+          pages = []
+          articles = []
+          redirects = {}
+          redirect_ids = {}
+
+          for obj in objects:
+              kind = obj.get('__typename')
+              if kind == 'Product':
+                  products.append(obj)
+              elif kind == 'Collection':
+                  collections.append(obj)
+              elif kind == 'Page':
+                  pages.append(obj)
+              elif kind == 'Article':
+                  articles.append(obj)
+              elif kind == 'UrlRedirect':
+                  path = obj.get('path')
+                  if path:
+                      redirects[path] = obj.get('target') or ''
+                      redirect_ids[path] = obj.get('id')
+
+          active_product_paths = {f"/products/{p['handle']}" for p in products if p.get('status') == 'ACTIVE'}
+          archived_product_paths = {f"/products/{p['handle']}" for p in products if p.get('status') != 'ACTIVE'}
+          collection_paths = {f"/collections/{c['handle']}" for c in collections}
+          page_paths = {f"/pages/{p['handle']}" for p in pages if p.get('isPublished')}
+          article_paths = {
+              f"/blogs/{(a.get('blog') or {}).get('handle')}/{a['handle']}"
+              for a in articles if a.get('isPublished') and (a.get('blog') or {}).get('handle')
+          }
+          blog_paths = {
+              f"/blogs/{(a.get('blog') or {}).get('handle')}"
+              for a in articles if (a.get('blog') or {}).get('handle')
+          }
+          valid_paths = active_product_paths | collection_paths | page_paths | article_paths | blog_paths | {
+              '/', '/collections', '/collections/all', '/search', '/cart', '/account',
+              '/account/login', '/account/register', '/policies/privacy-policy',
+              '/policies/refund-policy', '/policies/shipping-policy', '/policies/terms-of-service',
+              '/sitemap.xml', '/robots.txt', '/llms.txt', '/llms-full.txt', '/agents.md'
+          }
+
+          def resolve_redirect(path):
+              seen = []
+              current = path
+              while current in redirects:
+                  if current in seen:
+                      return {'final': current, 'chain': seen + [current], 'loop': True}
+                  seen.append(current)
+                  target = redirects[current]
+                  target_path = normalize_internal(target)
+                  if target_path is None:
+                      return {'final': target, 'chain': seen, 'loop': False, 'external': True}
+                  current = target_path
+                  if len(seen) > 30:
+                      return {'final': current, 'chain': seen, 'loop': True}
+              return {'final': current, 'chain': seen, 'loop': False, 'external': False}
+
+          source_records = []
+          for c in collections:
+              source_records.append({
+                  'type': 'collection',
+                  'id': c.get('id'),
+                  'title': c.get('title'),
+                  'path': f"/collections/{c.get('handle')}",
+                  'html': c.get('descriptionHtml') or ''
+              })
+          for p in pages:
+              if p.get('isPublished'):
+                  source_records.append({
+                      'type': 'page',
+                      'id': p.get('id'),
+                      'title': p.get('title'),
+                      'path': f"/pages/{p.get('handle')}",
+                      'html': p.get('body') or ''
+                  })
+          for a in articles:
+              if a.get('isPublished'):
+                  blog_handle = (a.get('blog') or {}).get('handle')
+                  source_records.append({
+                      'type': 'article',
+                      'id': a.get('id'),
+                      'title': a.get('title'),
+                      'path': f"/blogs/{blog_handle}/{a.get('handle')}",
+                      'html': (a.get('body') or '') + '\n' + (a.get('summary') or '')
+                  })
+
+          occurrences = Counter()
+          redirect_link_issues = []
+          unknown_link_issues = []
+          archived_link_issues = []
+          within_collection_issues = []
+          locale_link_issues = []
+          valid_link_occurrences = 0
+          all_internal_occurrences = 0
+
+          for source in source_records:
+              for href in links_from_html(source['html']):
+                  path = normalize_internal(href)
+                  if path is None:
+                      continue
+                  all_internal_occurrences += 1
+                  occurrences[path] += 1
+                  plain_path = strip_locale(path)
+
+                  if path in redirects:
+                      resolved = resolve_redirect(path)
+                      redirect_link_issues.append({
+                          'source_type': source['type'],
+                          'source_id': source['id'],
+                          'source_title': source['title'],
+                          'source_path': source['path'],
+                          'href': href,
+                          'path': path,
+                          'direct_target': redirects[path],
+                          'final_target': resolved['final'],
+                          'chain_length': len(resolved['chain']),
+                          'loop': resolved['loop']
+                      })
+                      continue
+
+                  match = re.match(r'^/collections/[^/]+/products/([^/]+)$', plain_path)
+                  if match:
+                      canonical = '/products/' + match.group(1)
+                      if canonical in active_product_paths:
+                          within_collection_issues.append({
+                              'source_type': source['type'],
+                              'source_id': source['id'],
+                              'source_title': source['title'],
+                              'source_path': source['path'],
+                              'href': href,
+                              'path': path,
+                              'canonical_target': canonical
+                          })
+                          continue
+
+                  if plain_path in archived_product_paths:
+                      archived_link_issues.append({
+                          'source_type': source['type'],
+                          'source_id': source['id'],
+                          'source_title': source['title'],
+                          'source_path': source['path'],
+                          'href': href,
+                          'path': path
+                      })
+                      continue
+
+                  if plain_path in valid_paths:
+                      valid_link_occurrences += 1
+                      if path != plain_path:
+                          locale_link_issues.append({
+                              'source_type': source['type'],
+                              'source_id': source['id'],
+                              'source_title': source['title'],
+                              'source_path': source['path'],
+                              'href': href,
+                              'path': path,
+                              'canonical_target': plain_path
+                          })
+                      continue
+
+                  if plain_path.startswith(('/cdn/', '/apps/', '/tools/', '/challenge', '/checkouts/', '/recommendations/', '/localization')):
+                      valid_link_occurrences += 1
+                      continue
+
+                  unknown_link_issues.append({
+                      'source_type': source['type'],
+                      'source_id': source['id'],
+                      'source_title': source['title'],
+                      'source_path': source['path'],
+                      'href': href,
+                      'path': path
+                  })
+
+          redirect_chains = []
+          redirect_loops = []
+          redirect_bad_targets = []
+          for path, target in redirects.items():
+              resolved = resolve_redirect(path)
+              if resolved['loop']:
+                  redirect_loops.append({'path': path, 'target': target, **resolved})
+              if len(resolved['chain']) > 1:
+                  redirect_chains.append({'path': path, 'target': target, **resolved})
+              final = resolved['final']
+              if not resolved.get('external') and final not in valid_paths and final not in archived_product_paths:
+                  redirect_bad_targets.append({'path': path, 'target': target, 'final_target': final, 'chain_length': len(resolved['chain'])})
+
+          def summarize_by_source(items):
+              return dict(Counter(i['source_type'] for i in items))
+
+          report = {
+              'summary': {
+                  'objects_read': len(objects),
+                  'products': len(products),
+                  'active_products': len(active_product_paths),
+                  'archived_or_other_products': len(archived_product_paths),
+                  'collections': len(collections),
+                  'published_pages': sum(1 for p in pages if p.get('isPublished')),
+                  'published_articles': sum(1 for a in articles if a.get('isPublished')),
+                  'redirects': len(redirects),
+                  'content_sources_scanned': len(source_records),
+                  'internal_link_occurrences': all_internal_occurrences,
+                  'unique_internal_targets': len(occurrences),
+                  'direct_valid_link_occurrences': valid_link_occurrences,
+                  'links_through_redirect_occurrences': len(redirect_link_issues),
+                  'links_through_redirect_unique_targets': len({i['path'] for i in redirect_link_issues}),
+                  'within_collection_product_links': len(within_collection_issues),
+                  'links_to_archived_products': len(archived_link_issues),
+                  'locale_prefixed_internal_links': len(locale_link_issues),
+                  'unknown_internal_link_occurrences': len(unknown_link_issues),
+                  'redirect_chains': len(redirect_chains),
+                  'redirect_loops': len(redirect_loops),
+                  'redirects_with_unknown_final_target': len(redirect_bad_targets)
+              },
+              'by_source': {
+                  'redirect_links': summarize_by_source(redirect_link_issues),
+                  'unknown_links': summarize_by_source(unknown_link_issues),
+                  'archived_links': summarize_by_source(archived_link_issues),
+                  'within_collection_links': summarize_by_source(within_collection_issues)
+              },
+              'links_through_redirect': redirect_link_issues,
+              'unknown_internal_links': unknown_link_issues,
+              'links_to_archived_products': archived_link_issues,
+              'within_collection_product_links': within_collection_issues,
+              'locale_prefixed_internal_links': locale_link_issues,
+              'redirect_chains': redirect_chains,
+              'redirect_loops': redirect_loops,
+              'redirects_with_unknown_final_target': redirect_bad_targets,
+              'top_internal_targets': occurrences.most_common(100)
+          }
+
+          with open('internal-link-audit-report.json', 'w', encoding='utf-8') as f:
+              json.dump(report, f, ensure_ascii=False, indent=2)
+          print(json.dumps(report['summary'], ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit audit report
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add internal-link-audit-report.json
+          git commit -m "Add Decords internal link audit report" || exit 0
+          git push
