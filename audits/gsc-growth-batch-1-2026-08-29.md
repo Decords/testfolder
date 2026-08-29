@@ -11,28 +11,40 @@ Search Console comparison window: 2026-07-30 to 2026-08-26
 - Confirmed Shopify Markets configuration is intentional: `www.decords.com` is the primary domain, Germany uses `decords.de`, Estonia uses `seinakleebised.ee`, and additional languages use locale subfolders on `.com`.
 - The tracker reached 55 indexed URLs out of 55 before adding the growth-monitoring set.
 
-## Data-quality correction
+## Query-order correction
 
-The first aggregate opportunity report materially overstated some keyword volumes, especially mushroom shelf terms. The reproducible baseline below uses exact Search Console API rows with `date`, `query` and `page` dimensions.
+Mushroom shelf demand changes materially with word order. The initial low-volume verification checked `mushroom floating shelf`, while the largest opportunity uses `floating mushroom shelf`. Exact Search Console API rows with `date`, `query` and `page` dimensions confirm both values.
 
-Correct exact examples:
+Confirmed mushroom query examples:
 
-- `mushroom floating shelf`: 16 impressions across all landing pages, not 1,026.
-- `mushroom wall shelf`: 142 impressions across all landing pages, not 1,001.
+| Exact query | Clicks | Impressions | Average position |
+|---|---:|---:|---:|
+| floating mushroom shelf | 0 | 1,027 | 9.62 |
+| mushroom floating shelf | 1 | 16 | approximately 10–11 across the main product rows |
+| mushroom floating wall shelf | 0 | 752 | 10.82 |
+| mushroom floating shelf art | 0 | 794 | 17.51 |
+| floating shelf mushroom | 0 | 636 | 14.18 |
+| mushroom floating wall shelves | 0 | 479 | 13.23 |
+| mushroom shelf | 1 | 197 | 10.05 |
+| mushroom wall shelf | 0 | 142 | based on exact query-page rows |
 
-The mushroom pages remain relevant optimization targets, but they are not the largest opportunity group. Confirmed priorities are office wall art, clear mailing labels, floor stickers, car vinyl decals and window stickers.
+Conclusion: mushroom floating shelves are the largest confirmed on-page growth opportunity in this batch. The correction is not a change in Search Console data; it fixes an earlier comparison between different exact queries.
 
 ## Confirmed baseline opportunities
 
 | Query | Primary landing page | Clicks | Impressions | Average position |
 |---|---|---:|---:|---:|
+| floating mushroom shelf | `/products/3d-printed-mushroom-shelf-floating-wall-09484` plus secondary shelf pages | 0 | 1,027 | 9.62 |
+| mushroom floating shelf art | primarily `/products/3d-printed-mushroom-shelf-floating-wall-09484` | 0 | 794 | 17.51 |
+| mushroom floating wall shelf | primarily `/products/3d-printed-mushroom-shelf-floating-wall-09484` | 0 | 752 | 10.82 |
+| floating shelf mushroom | primarily `/products/3d-printed-mushroom-shelf-floating-wall-09484` | 0 | 636 | 14.18 |
 | office wall art | `/products/inspirational-home-office-decor-wall-art-74358` | 0 | 598 | 10.97 |
 | clear mailing labels | `/products/custom-clear-address-labels-personalized-return-mailing-avery-shipping-stickers-personal-self-adhesive-envelope-mail-stick-lables` | 0 | 527 | 9.51 |
 | floor stickers | `/products/floor-stickers-vinyl-floor-98044` | 0 | 405 | 12.72 |
 | car vinyl decals | `/products/honeycomb-hood-car-decal-sport-car-34437` | 0 | 361 | 12.43 |
 | window stickers | `/collections/window-stickers-and-decals` | 0 | 363 | 15.89 |
 
-The table uses the primary English landing page and excludes small locale or product-feed parameter variants where noted.
+The table uses exact query strings. The non-mushroom rows use the primary English landing page and exclude small locale or product-feed parameter variants where noted.
 
 ## Shopify changes completed
 
@@ -43,7 +55,7 @@ Updated the two main mushroom shelf products without changing their handles:
 - `3D Printed Mushroom Floating Shelf | Gilled Wall Ledge`
 - `3D Printed Mushroom Wall Shelf | Sculpted-Gill Ledge`
 
-The two products now have distinct titles, SEO metadata, introductory copy and design-specific descriptions. Both link to `/collections/3d-printed-mushroom-wall-shelves`.
+The primary 09484 product now directly targets the high-volume `floating mushroom shelf` and `mushroom floating wall shelf` intent. The secondary 05272 product is differentiated as a sculpted-gill design rather than competing with identical metadata. Both products now have distinct titles, SEO metadata, introductory copy and design-specific descriptions. Both link to `/collections/3d-printed-mushroom-wall-shelves`.
 
 ### Clear mailing labels
 
@@ -115,4 +127,4 @@ All Shopify mutations in this batch completed with zero `userErrors`.
 
 ## Measurement plan
 
-Use exact Search Console API query-page rows rather than aggregate opportunity totals. Compare the confirmed query groups after Google recrawls the updated pages. Primary metrics are clicks, impressions, CTR, average position and whether broad terms migrate from a single product to the intended collection.
+Compare exact Search Console query-page rows after Google recrawls the updated pages. Primary metrics are clicks, impressions, CTR, average position and the distribution of mushroom shelf impressions between the primary 09484 product, the differentiated 05272 product and the dedicated mushroom shelf collection.
