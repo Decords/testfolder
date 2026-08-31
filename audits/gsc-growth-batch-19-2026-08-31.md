@@ -311,9 +311,9 @@ SEO-title length: 52 characters.
 
 New meta description:
 
-`Sheet of 168 green-and-yellow PE labels, each about 0.35 × 0.35 inches, for supplemental protective-earth identification. Verify applicable marking rules.`
+`Set of 168 green-and-yellow PE labels, each about 0.35 × 0.35 inches, for supplemental protective-earth identification. Verify applicable marking rules.`
 
-Meta-description length: 154 characters.
+Meta-description length: 152 characters.
 
 ### Content changes
 
@@ -428,7 +428,8 @@ The Shopify writes were completed at:
 - door mural: 2026-08-31 08:43:21 UTC;
 - boho stripe set: 2026-08-31 08:46:10 UTC;
 - mirror decal: 2026-08-31 08:46:11 UTC;
-- PE labels: 2026-08-31 08:46:12 UTC.
+- PE labels, full content update: 2026-08-31 08:46:12 UTC;
+- PE labels, final metadata precision update: 2026-08-31 08:54:03 UTC.
 
 Every recorded Google crawl occurred before the new content was published. Therefore all four URLs are already indexed, but Google has not yet processed the revised titles, descriptions, tags and internal links.
 
@@ -487,7 +488,7 @@ The other three routed pages displayed the new English fallback SEO fields:
 
 - boho meta description: 156 characters;
 - mirror meta description: 148 characters;
-- PE meta description: 154 characters.
+- PE meta description: 154 characters during the initial crawl; the final English value was refined to 152 characters after the crawl.
 
 German localized metadata was outside the scope of this English-only product batch and was not changed.
 
