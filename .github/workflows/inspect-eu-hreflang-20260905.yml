@@ -1,0 +1,108 @@
+name: Inspect decords.eu hreflang 2026-09-05
+
+on:
+  push:
+    paths:
+      - '.github/workflows/inspect-eu-hreflang-20260905.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract canonical and hreflang tags
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import urljoin
+
+          import requests
+
+          DATE = '2026-09-05'
+          audit = json.loads(Path(f'audits/technical-searchbot-seo-audit-{DATE}.json').read_text(encoding='utf-8'))
+          urls = []
+          for row in audit.get('pages', []):
+              if row.get('domain') == 'Russian EU':
+                  urls.append((row.get('page_type', ''), row.get('requested_url', '')))
+          urls = [(kind, url) for kind, url in urls if url]
+
+          class Parser(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True)
+                  self.lang = ''
+                  self.canonicals = []
+                  self.alternates = []
+              def handle_starttag(self, tag, attrs):
+                  data = {str(k).lower(): (v or '') for k, v in attrs}
+                  if tag.lower() == 'html':
+                      self.lang = data.get('lang', '')
+                  if tag.lower() != 'link':
+                      return
+                  rel = {x.lower() for x in data.get('rel', '').split()}
+                  if 'canonical' in rel and data.get('href'):
+                      self.canonicals.append(data['href'])
+                  if 'alternate' in rel and data.get('hreflang') and data.get('href'):
+                      self.alternates.append({'hreflang': data['hreflang'], 'href': data['href']})
+
+          headers = {
+              'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          }
+          results = []
+          for page_type, url in urls:
+              response = requests.get(url, headers=headers, timeout=40, allow_redirects=True)
+              parser = Parser()
+              parser.feed(response.text)
+              results.append({
+                  'page_type': page_type,
+                  'requested_url': url,
+                  'status': response.status_code,
+                  'final_url': response.url,
+                  'html_lang': parser.lang,
+                  'canonical': [urljoin(response.url, x) for x in parser.canonicals],
+                  'hreflang': [
+                      {'hreflang': x['hreflang'], 'href': urljoin(response.url, x['href'])}
+                      for x in parser.alternates
+                  ],
+              })
+
+          output = Path(f'audits/technical-eu-hreflang-inspection-{DATE}.json')
+          output.write_text(json.dumps({'results': results}, ensure_ascii=False, indent=2), encoding='utf-8')
+
+          lines = [f'# decords.eu hreflang inspection — {DATE}', '']
+          for row in results:
+              lines.extend([
+                  f"## {row['page_type']}: `{row['requested_url']}`",
+                  '',
+                  f"- HTTP: {row['status']}",
+                  f"- Final: `{row['final_url']}`",
+                  f"- HTML lang: `{row['html_lang']}`",
+                  f"- Canonical: `{row['canonical']}`",
+                  '',
+                  '| hreflang | URL |',
+                  '|---|---|',
+              ])
+              for item in row['hreflang']:
+                  lines.append(f"| `{item['hreflang']}` | `{item['href']}` |")
+              lines.append('')
+          Path(f'audits/technical-eu-hreflang-inspection-{DATE}.md').write_text('\n'.join(lines), encoding='utf-8')
+          print(json.dumps({'pages': len(results)}, ensure_ascii=False))
+          PY
+
+      - name: Commit inspection output
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add audits/technical-eu-hreflang-inspection-2026-09-05.json \
+                  audits/technical-eu-hreflang-inspection-2026-09-05.md
+          git commit -m "Inspect decords.eu hreflang tags" || exit 0
+          git push
