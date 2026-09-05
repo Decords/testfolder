@@ -1,0 +1,473 @@
+name: Technical storefront SEO audit 2026-09-05
+
+on:
+  push:
+    paths:
+      - '.github/workflows/technical-storefront-seo-audit-20260905.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Audit domains, sitemaps, canonical and hreflang
+        run: |
+          python - <<'PY'
+          import csv
+          import html as html_lib
+          import json
+          import re
+          import time
+          import xml.etree.ElementTree as ET
+          from collections import Counter, defaultdict
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import urljoin, urlsplit
+
+          import requests
+
+          DATE = '2026-09-05'
+          OUT = Path('audits')
+          OUT.mkdir(exist_ok=True)
+          CONFIG = [
+              {
+                  'label': 'International / US',
+                  'base': 'https://www.decords.com',
+                  'expected_language': 'en',
+                  'expected_currency': 'USD',
+                  'accept_language': 'en-US,en;q=0.9',
+              },
+              {
+                  'label': 'Germany',
+                  'base': 'https://www.decords.de',
+                  'expected_language': 'de',
+                  'expected_currency': 'EUR',
+                  'accept_language': 'de-DE,de;q=0.9,en;q=0.7',
+              },
+              {
+                  'label': 'Russian EU',
+                  'base': 'https://www.decords.eu',
+                  'expected_language': 'ru',
+                  'expected_currency': 'EUR',
+                  'accept_language': 'ru-RU,ru;q=0.9,en;q=0.7',
+              },
+              {
+                  'label': 'Estonia',
+                  'base': 'https://seinakleebised.ee',
+                  'expected_language': 'et',
+                  'expected_currency': 'EUR',
+                  'accept_language': 'et-EE,et;q=0.9,en;q=0.7',
+              },
+          ]
+          UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/152.0 Safari/537.36 DecordsTechnicalAudit/3.0'
+
+          def normalize_host(url):
+              host = urlsplit(url).hostname or ''
+              return host.lower().removeprefix('www.')
+
+          def fetch(url, language):
+              headers = {
+                  'User-Agent': UA,
+                  'Accept-Language': language,
+                  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+              }
+              error = ''
+              for attempt in range(3):
+                  try:
+                      response = requests.get(url, headers=headers, timeout=40, allow_redirects=True)
+                      if response.status_code in {429, 502, 503, 504} and attempt < 2:
+                          time.sleep(1.5 * (attempt + 1))
+                          continue
+                      return {
+                          'requested_url': url,
+                          'status': response.status_code,
+                          'final_url': response.url,
+                          'history': [
+                              {
+                                  'status': item.status_code,
+                                  'url': item.url,
+                                  'location': item.headers.get('location', ''),
+                              }
+                              for item in response.history
+                          ],
+                          'content_type': response.headers.get('content-type', ''),
+                          'text': response.text,
+                          'headers': dict(response.headers),
+                          'error': '',
+                      }
+                  except Exception as exc:
+                      error = f'{type(exc).__name__}: {exc}'
+                      if attempt < 2:
+                          time.sleep(1.0 * (attempt + 1))
+              return {
+                  'requested_url': url, 'status': 0, 'final_url': '', 'history': [],
+                  'content_type': '', 'text': '', 'headers': {}, 'error': error,
+              }
+
+          class HeadParser(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True)
+                  self.html_lang = ''
+                  self.title = ''
+                  self._in_title = False
+                  self.canonicals = []
+                  self.hreflangs = []
+                  self.robots = []
+                  self.jsonld = []
+                  self._jsonld_active = False
+                  self._jsonld_parts = []
+
+              def handle_starttag(self, tag, attrs):
+                  data = {str(k).lower(): (v or '') for k, v in attrs}
+                  tag = tag.lower()
+                  if tag == 'html':
+                      self.html_lang = data.get('lang', '')
+                  elif tag == 'title':
+                      self._in_title = True
+                  elif tag == 'link':
+                      rel = {part.lower() for part in data.get('rel', '').split()}
+                      href = data.get('href', '')
+                      if 'canonical' in rel and href:
+                          self.canonicals.append(href)
+                      if 'alternate' in rel and data.get('hreflang') and href:
+                          self.hreflangs.append((data['hreflang'], href))
+                  elif tag == 'meta':
+                      if data.get('name', '').lower() in {'robots', 'googlebot'}:
+                          self.robots.append(data.get('content', ''))
+                  elif tag == 'script' and data.get('type', '').lower() == 'application/ld+json':
+                      self._jsonld_active = True
+                      self._jsonld_parts = []
+
+              def handle_endtag(self, tag):
+                  tag = tag.lower()
+                  if tag == 'title':
+                      self._in_title = False
+                  elif tag == 'script' and self._jsonld_active:
+                      self._jsonld_active = False
+                      self.jsonld.append(''.join(self._jsonld_parts).strip())
+                      self._jsonld_parts = []
+
+              def handle_data(self, data):
+                  if self._in_title:
+                      self.title += data
+                  if self._jsonld_active:
+                      self._jsonld_parts.append(data)
+
+          def walk_json(value, urls, currencies, types):
+              if isinstance(value, dict):
+                  if '@type' in value:
+                      current_type = value.get('@type')
+                      if isinstance(current_type, list):
+                          types.update(str(x) for x in current_type)
+                      elif current_type:
+                          types.add(str(current_type))
+                  for key, item in value.items():
+                      if key in {'url', '@id', 'contentUrl', 'merchantReturnLink'} and isinstance(item, str):
+                          urls.append(item)
+                      if key == 'priceCurrency' and isinstance(item, str):
+                          currencies.add(item)
+                      walk_json(item, urls, currencies, types)
+              elif isinstance(value, list):
+                  for item in value:
+                      walk_json(item, urls, currencies, types)
+
+          def parse_html(text, final_url):
+              parser = HeadParser()
+              try:
+                  parser.feed(text)
+              except Exception:
+                  pass
+              canonical_urls = [urljoin(final_url, item.strip()) for item in parser.canonicals if item.strip()]
+              hreflangs = [
+                  {'hreflang': code.strip(), 'href': urljoin(final_url, href.strip())}
+                  for code, href in parser.hreflangs if code.strip() and href.strip()
+              ]
+              schema_urls = []
+              schema_currencies = set()
+              schema_types = set()
+              schema_parse_errors = 0
+              for block in parser.jsonld:
+                  if not block:
+                      continue
+                  try:
+                      value = json.loads(block)
+                  except Exception:
+                      schema_parse_errors += 1
+                      continue
+                  walk_json(value, schema_urls, schema_currencies, schema_types)
+              return {
+                  'html_lang': parser.html_lang.strip(),
+                  'title': html_lib.unescape(re.sub(r'\s+', ' ', parser.title).strip()),
+                  'canonical_urls': canonical_urls,
+                  'hreflangs': hreflangs,
+                  'robots_meta': parser.robots,
+                  'schema_urls': schema_urls,
+                  'schema_currencies': sorted(schema_currencies),
+                  'schema_types': sorted(schema_types),
+                  'schema_parse_errors': schema_parse_errors,
+              }
+
+          def xml_locations(text):
+              try:
+                  root = ET.fromstring(text)
+              except Exception:
+                  return [], ''
+              root_type = root.tag.rsplit('}', 1)[-1]
+              locations = []
+              for element in root.iter():
+                  if element.tag.rsplit('}', 1)[-1] == 'loc' and element.text:
+                      locations.append(element.text.strip())
+              return locations, root_type
+
+          def classify_url(url):
+              path = urlsplit(url).path.lower()
+              if '/products/' in path:
+                  return 'product'
+              if '/collections/' in path:
+                  return 'collection'
+              if '/blogs/' in path:
+                  segments = [x for x in path.split('/') if x]
+                  return 'article' if len(segments) >= 3 else 'blog'
+              if '/pages/' in path or '/policies/' in path:
+                  return 'page'
+              return 'other'
+
+          def choose_samples(child_results):
+              pools = defaultdict(list)
+              for child in child_results:
+                  for url in child.get('locations', []):
+                      pools[classify_url(url)].append(url)
+              chosen = []
+              for page_type in ['product', 'collection', 'page', 'article', 'blog']:
+                  if pools[page_type]:
+                      chosen.append((page_type, pools[page_type][0]))
+              return chosen
+
+          page_rows = []
+          domain_reports = []
+          sitemap_rows = []
+
+          for config in CONFIG:
+              base = config['base']
+              language = config['accept_language']
+              root_result = fetch(base + '/', language)
+              robots_result = fetch(base + '/robots.txt', language)
+              sitemap_result = fetch(base + '/sitemap.xml', language)
+              sitemap_locations, sitemap_root_type = xml_locations(sitemap_result['text'])
+
+              child_results = []
+              for child_url in sitemap_locations[:12]:
+                  child = fetch(child_url, language)
+                  locations, root_type = xml_locations(child['text'])
+                  child_results.append({
+                      'url': child_url,
+                      'status': child['status'],
+                      'final_url': child['final_url'],
+                      'root_type': root_type,
+                      'url_count': len(locations),
+                      'locations': locations,
+                      'error': child['error'],
+                  })
+                  sitemap_rows.append({
+                      'domain': config['label'],
+                      'sitemap_url': child_url,
+                      'status': child['status'],
+                      'final_url': child['final_url'],
+                      'root_type': root_type,
+                      'url_count': len(locations),
+                      'error': child['error'],
+                  })
+
+              samples = [('home', root_result['final_url'] or base + '/')]
+              samples.extend(choose_samples(child_results))
+              seen = set()
+              deduped_samples = []
+              for page_type, url in samples:
+                  if url and url not in seen:
+                      seen.add(url)
+                      deduped_samples.append((page_type, url))
+
+              for page_type, url in deduped_samples:
+                  result = root_result if page_type == 'home' and url == root_result.get('final_url') else fetch(url, language)
+                  parsed = parse_html(result['text'], result['final_url'] or url)
+                  final_host = normalize_host(result['final_url'] or url)
+                  canonical_hosts = [normalize_host(item) for item in parsed['canonical_urls']]
+                  expected_lang = config['expected_language'].lower()
+                  actual_lang = parsed['html_lang'].lower()
+                  lang_ok = actual_lang == expected_lang or actual_lang.startswith(expected_lang + '-')
+                  canonical_count = len(parsed['canonical_urls'])
+                  canonical_host_ok = canonical_count == 1 and canonical_hosts[0] == final_host
+                  requested_path = urlsplit(result['final_url'] or url).path.rstrip('/') or '/'
+                  self_hreflang = False
+                  x_default = False
+                  alternate_hosts = set()
+                  for item in parsed['hreflangs']:
+                      code = item['hreflang'].lower()
+                      href_path = urlsplit(item['href']).path.rstrip('/') or '/'
+                      alternate_hosts.add(normalize_host(item['href']))
+                      if code == 'x-default':
+                          x_default = True
+                      if code == expected_lang or code.startswith(expected_lang + '-'):
+                          if normalize_host(item['href']) == final_host and href_path == requested_path:
+                              self_hreflang = True
+                  currency_ok = True
+                  if page_type == 'product':
+                      currency_ok = config['expected_currency'] in parsed['schema_currencies']
+                  schema_wrong_market_urls = [
+                      item for item in parsed['schema_urls']
+                      if item.startswith('http') and normalize_host(item) in {
+                          'decords.com', 'decords.de', 'decords.eu', 'seinakleebised.ee'
+                      } and normalize_host(item) != final_host
+                  ]
+                  noindex = any('noindex' in value.lower() for value in parsed['robots_meta'])
+                  page_rows.append({
+                      'domain': config['label'],
+                      'page_type': page_type,
+                      'requested_url': url,
+                      'status': result['status'],
+                      'final_url': result['final_url'],
+                      'redirect_hops': len(result['history']),
+                      'title': parsed['title'],
+                      'html_lang': parsed['html_lang'],
+                      'expected_language': config['expected_language'],
+                      'language_ok': lang_ok,
+                      'canonical_count': canonical_count,
+                      'canonical': parsed['canonical_urls'][0] if canonical_count == 1 else ' | '.join(parsed['canonical_urls']),
+                      'canonical_host_ok': canonical_host_ok,
+                      'hreflang_count': len(parsed['hreflangs']),
+                      'self_hreflang': self_hreflang,
+                      'x_default': x_default,
+                      'alternate_hosts': sorted(alternate_hosts),
+                      'robots_meta': parsed['robots_meta'],
+                      'noindex': noindex,
+                      'schema_types': parsed['schema_types'],
+                      'schema_currencies': parsed['schema_currencies'],
+                      'expected_currency': config['expected_currency'],
+                      'currency_ok': currency_ok,
+                      'schema_parse_errors': parsed['schema_parse_errors'],
+                      'schema_wrong_market_url_count': len(schema_wrong_market_urls),
+                      'schema_wrong_market_urls': schema_wrong_market_urls[:20],
+                      'error': result['error'],
+                  })
+
+              robots_has_sitemap = 'sitemap:' in robots_result['text'].lower()
+              domain_reports.append({
+                  'label': config['label'],
+                  'base': base,
+                  'expected_language': config['expected_language'],
+                  'expected_currency': config['expected_currency'],
+                  'root_status': root_result['status'],
+                  'root_final_url': root_result['final_url'],
+                  'root_redirect_hops': len(root_result['history']),
+                  'robots_status': robots_result['status'],
+                  'robots_has_sitemap': robots_has_sitemap,
+                  'sitemap_status': sitemap_result['status'],
+                  'sitemap_final_url': sitemap_result['final_url'],
+                  'sitemap_root_type': sitemap_root_type,
+                  'child_sitemap_count': len(sitemap_locations),
+                  'checked_child_sitemaps': len(child_results),
+                  'child_sitemap_failures': sum(1 for child in child_results if child['status'] != 200),
+                  'sample_page_count': len(deduped_samples),
+              })
+
+          failure_counts = Counter()
+          for row in page_rows:
+              if row['status'] != 200:
+                  failure_counts['http_status'] += 1
+              if not row['language_ok']:
+                  failure_counts['html_language'] += 1
+              if not row['canonical_host_ok']:
+                  failure_counts['canonical'] += 1
+              if not row['self_hreflang']:
+                  failure_counts['self_hreflang'] += 1
+              if not row['x_default']:
+                  failure_counts['x_default'] += 1
+              if row['page_type'] == 'product' and not row['currency_ok']:
+                  failure_counts['product_currency'] += 1
+              if row['noindex']:
+                  failure_counts['unexpected_noindex'] += 1
+              if row['schema_parse_errors']:
+                  failure_counts['schema_parse_error'] += 1
+              if row['schema_wrong_market_url_count']:
+                  failure_counts['schema_cross_domain_urls'] += 1
+
+          summary = {
+              'domains_checked': len(CONFIG),
+              'sample_pages_checked': len(page_rows),
+              'child_sitemaps_checked': len(sitemap_rows),
+              'root_failures': sum(1 for item in domain_reports if item['root_status'] != 200),
+              'robots_failures': sum(1 for item in domain_reports if item['robots_status'] != 200 or not item['robots_has_sitemap']),
+              'sitemap_failures': sum(1 for item in domain_reports if item['sitemap_status'] != 200 or item['child_sitemap_failures']),
+              'page_failure_counts': dict(failure_counts),
+          }
+
+          report = {
+              'generated_at': DATE,
+              'summary': summary,
+              'domains': domain_reports,
+              'pages': page_rows,
+              'sitemaps': sitemap_rows,
+          }
+          json_path = OUT / f'technical-storefront-seo-audit-{DATE}.json'
+          pages_tsv = OUT / f'technical-storefront-seo-pages-{DATE}.tsv'
+          md_path = OUT / f'technical-storefront-seo-audit-{DATE}.md'
+          json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
+
+          fields = [
+              'domain', 'page_type', 'requested_url', 'status', 'final_url', 'redirect_hops',
+              'html_lang', 'expected_language', 'language_ok', 'canonical_count', 'canonical',
+              'canonical_host_ok', 'hreflang_count', 'self_hreflang', 'x_default',
+              'schema_currencies', 'expected_currency', 'currency_ok', 'noindex',
+              'schema_parse_errors', 'schema_wrong_market_url_count', 'error',
+          ]
+          with pages_tsv.open('w', encoding='utf-8', newline='') as fh:
+              writer = csv.DictWriter(fh, fieldnames=fields, delimiter='\t', extrasaction='ignore')
+              writer.writeheader()
+              writer.writerows(page_rows)
+
+          lines = [
+              f'# Technical storefront SEO audit — {DATE}', '',
+              '## Domains', '',
+              '| Domain | Root | Robots | Sitemap | Child sitemaps |',
+              '|---|---:|---:|---:|---:|',
+          ]
+          for item in domain_reports:
+              lines.append(
+                  f"| {item['label']} | {item['root_status']} | {item['robots_status']} | "
+                  f"{item['sitemap_status']} | {item['child_sitemap_count']} |"
+              )
+          lines.extend(['', '## Page checks', '',
+                        '| Domain | Type | HTTP | Lang | Canonical | Hreflang self | x-default | Currency | Cross-domain schema URLs |',
+                        '|---|---|---:|---|---|---|---|---|---:|'])
+          for row in page_rows:
+              lines.append(
+                  f"| {row['domain']} | {row['page_type']} | {row['status']} | "
+                  f"{'OK' if row['language_ok'] else 'FAIL'} | "
+                  f"{'OK' if row['canonical_host_ok'] else 'FAIL'} | "
+                  f"{'OK' if row['self_hreflang'] else 'FAIL'} | "
+                  f"{'OK' if row['x_default'] else 'FAIL'} | "
+                  f"{'OK' if row['currency_ok'] else 'FAIL'} | "
+                  f"{row['schema_wrong_market_url_count']} |"
+              )
+          lines.extend(['', '## Failure counts', '', '| Check | Count |', '|---|---:|'])
+          for key, value in sorted(failure_counts.items(), key=lambda item: (-item[1], item[0])):
+              lines.append(f'| `{key}` | {value} |')
+          md_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          print(json.dumps(summary, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit audit outputs
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add audits/technical-storefront-seo-audit-2026-09-05.json \
+                  audits/technical-storefront-seo-pages-2026-09-05.tsv \
+                  audits/technical-storefront-seo-audit-2026-09-05.md
+          git commit -m "Add multi-domain storefront SEO audit" || exit 0
+          git push
