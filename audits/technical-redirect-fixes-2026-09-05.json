@@ -1,0 +1,17 @@
+{
+  "summary": {
+    "count": 1,
+    "chain_fixes": 1,
+    "previously_reviewed_fixes": 0
+  },
+  "updates": [
+    {
+      "id": "gid://shopify/UrlRedirect/1498706411858",
+      "path": "/products/vinyl-removable-letter-stickers-peel-and-stick-alphabet-number-waterproof-decal-black-white-self-adhesive-lettering-sign-for-outdoor-1",
+      "old_target": "/products/vinyl-removable-letter-stickers-peel-16711",
+      "new_target": "/products/vinyl-removable-letter-stickers-peel-41662",
+      "reason": "redirect_chain",
+      "hops_removed": 1
+    }
+  ]
+}

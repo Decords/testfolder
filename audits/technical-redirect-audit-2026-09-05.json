@@ -1,0 +1,399 @@
+{
+  "generated_at": "2026-09-05",
+  "source_url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/3484ed6e6ea5c53a299a6ef619bc?v=1788617439",
+  "summary": {
+    "export_objects": 5401,
+    "redirects": 2354,
+    "products": 2697,
+    "active_products": 2644,
+    "collections": 143,
+    "pages": 37,
+    "published_pages": 20,
+    "articles": 170,
+    "published_articles": 170,
+    "duplicate_source_paths": 0,
+    "self_redirects": 0,
+    "cycles": 0,
+    "exact_chain_redirects": 1,
+    "safe_updates": 1,
+    "previously_reviewed_pending": 0,
+    "valid_direct_targets": 2306,
+    "external_targets": 2,
+    "unknown_or_unpublished_targets": 45,
+    "probable_query_stripped_chains": 0,
+    "source_paths_with_query": 328,
+    "targets_with_query": 7
+  },
+  "object_counts_by_type": {
+    "Article": 170,
+    "Collection": 143,
+    "Page": 37,
+    "Product": 2697,
+    "UrlRedirect": 2354
+  },
+  "unknown_problem_counts": {
+    "missing_product": 31,
+    "unknown_internal_route": 1,
+    "non_active_product": 1,
+    "missing_article": 11,
+    "missing_collection": 1
+  },
+  "safe_updates": [
+    {
+      "id": "gid://shopify/UrlRedirect/1498706411858",
+      "path": "/products/vinyl-removable-letter-stickers-peel-and-stick-alphabet-number-waterproof-decal-black-white-self-adhesive-lettering-sign-for-outdoor-1",
+      "old_target": "/products/vinyl-removable-letter-stickers-peel-16711",
+      "new_target": "/products/vinyl-removable-letter-stickers-peel-41662",
+      "reason": "redirect_chain",
+      "hops_removed": 1
+    }
+  ],
+  "redirect_chains": [
+    {
+      "id": "gid://shopify/UrlRedirect/1498706411858",
+      "path": "/products/vinyl-removable-letter-stickers-peel-and-stick-alphabet-number-waterproof-decal-black-white-self-adhesive-lettering-sign-for-outdoor-1",
+      "target": "/products/vinyl-removable-letter-stickers-peel-16711",
+      "final": "/products/vinyl-removable-letter-stickers-peel-41662",
+      "hops": 1,
+      "intermediates": [
+        "/products/vinyl-removable-letter-stickers-peel-16711"
+      ],
+      "final_status": "active_product"
+    }
+  ],
+  "cycles": [],
+  "self_redirects": [],
+  "unknown_or_unpublished_targets": [
+    {
+      "id": "gid://shopify/UrlRedirect/1768258273618",
+      "path": "/et/blogs/meisterdamine-dekooridega/anime-stickers",
+      "target": "/et/blogs/meisterdamine-dekooridega/anime-inspired-stickers",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258109778",
+      "path": "/et/blogs/meisterdamine-dekooridega/avastage-kuidas-seinakaunistusega-kleebised-voivad-teie-kodu-valimust-ja-tunnet-taielikult-muuta",
+      "target": "/et/blogs/meisterdamine-dekooridega/avastage-kuidas-3d-seinakleebised-voivad-teie-kodu-sisekujundust-taielikult-muuta",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258240850",
+      "path": "/et/blogs/meisterdamine-dekooridega/car-decals-the-ultimate-guide-to-vehicle-customization",
+      "target": "/et/blogs/meisterdamine-dekooridega/car-decals-guide",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258175314",
+      "path": "/et/blogs/meisterdamine-dekooridega/custom-car-stickers",
+      "target": "/et/blogs/meisterdamine-dekooridega/car-decals",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258306386",
+      "path": "/et/blogs/meisterdamine-dekooridega/custom-jeep-stickers",
+      "target": "/et/blogs/meisterdamine-dekooridega/custom-4x4-stickers",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258339154",
+      "path": "/et/blogs/meisterdamine-dekooridega/how-to-remove-stickers-from-wall",
+      "target": "/et/blogs/meisterdamine-dekooridega/oppige-meie-samm-sammulise-juhendi-abil-holpsasti-seinavinuulkleebiseid-eemaldama-jatke-huvasti-torksatele-liimijaakidele-ja-tere-varske-puhta-pinnaga",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258142546",
+      "path": "/et/blogs/meisterdamine-dekooridega/kuidas-seinakleebist-seinale-kleepida-voi-kleepida",
+      "target": "/et/blogs/meisterdamine-dekooridega/selle-pohjaliku-samm-sammulise-juhendi-abil-saate-teada-kuidas-holpsasti-seinakleebiste-kujundusi-peale-kanda",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258371922",
+      "path": "/et/blogs/meisterdamine-dekooridega/nursery-wall-decals",
+      "target": "/et/blogs/meisterdamine-dekooridega/a-buyers-guide-to-nursery-wall-decals-transform-your-babys-room-in-2026",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258044242",
+      "path": "/et/blogs/meisterdamine-dekooridega/nursery-wall-stickers",
+      "target": "/et/blogs/meisterdamine-dekooridega/a-buyers-guide-to-nursery-wall-decals-transform-your-babys-room-in-2026",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258208082",
+      "path": "/et/blogs/meisterdamine-dekooridega/removable-decals",
+      "target": "/et/blogs/meisterdamine-dekooridega/repositionable-decals",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258077010",
+      "path": "/et/blogs/meisterdamine-dekooridega/what-kind-of-wall-stickers-suits-best-for-the-living-room",
+      "target": "/et/blogs/meisterdamine-dekooridega/living-room-wall-stickers",
+      "status": "missing_article",
+      "problem": "missing_article"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768258470226",
+      "path": "/et/collections/other-1",
+      "target": "/et/collections/muud",
+      "status": "missing_collection",
+      "problem": "missing_collection"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768244511058",
+      "path": "/collections/wall-decals-canada/products/nespresso-coffee-capsule-holder-3d-23552",
+      "target": "/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768291926354",
+      "path": "/de/collections/wall-decals-canada/products/nespresso-coffee-capsule-holder-3d-23552",
+      "target": "/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768238580050",
+      "path": "/et/collections/car-business-decals/products/laughing-pumpkin-decal-halloween-scary-30472",
+      "target": "/et/products/naerva-korvitsa-kleebis-halloween-hirmus-kuri-nagu-vinuulist-seinakleebis-oudne-ja-jube-suur-oranz-korvits-kodukaunistuseks-1538730472-_",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768244871506",
+      "path": "/et/collections/car-door-decals/products/custom-car-hood-vinyl-sticker-wrap-for-55626",
+      "target": "/et/products/kohandatud-auto-kapoti-vinuulist-kleebisumbris-veoauto-kunstikleebise-jaoks-taisgraafiline-voidusoidu-sport-pimendav-disain-seinamaal",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768247853394",
+      "path": "/et/collections/custom-bulk-stickers/products/50x-leopard-animal-skin-sticker-pack-of-75820",
+      "target": "/et/products/50x-leopardloomanahast-kleebiste-pakk-gepardi-nahast-prindikleebised-vinuulumbriskleebised-armsad-kohakunstid-tudrukutele-ulekandekleebised",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768244969810",
+      "path": "/et/collections/custom-bulk-stickers/products/custom-car-hood-vinyl-sticker-wrap-for-55626",
+      "target": "/et/products/kohandatud-auto-kapoti-vinuulist-kleebisumbris-veoauto-kunstikleebise-jaoks-taisgraafiline-voidusoidu-sport-pimendav-disain-seinamaal",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768249426258",
+      "path": "/et/collections/custom-bulk-stickers/products/wall-frame-sticker-picture-frames-72348",
+      "target": "/et/products/seinaraam-kleebis-pildiraamid-kleebised-foto-vinuulkleebised-polaroid-minipere-kaunistatud-kleebised-fotod-isetegemise-sisustuskomplekt-dekoorkunst",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768245428562",
+      "path": "/et/collections/koik/products/nespresso-coffee-capsule-holder-3d-23552",
+      "target": "/et/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768248082770",
+      "path": "/et/collections/koik/products/thinking-panda-sticker-inspired-by-30786",
+      "target": "/et/products/motlev-panda-kleebis-inspireeritud-banksy-kunstist-vinuul-dj-baksy-seinakleebis-korvaklapid-pandakaru-muusika-motleja-tanavagrafiti-nutikas-seinamaaling",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768249459026",
+      "path": "/et/collections/koik/products/wall-frame-sticker-picture-frames-72348",
+      "target": "/et/products/seinaraam-kleebis-pildiraamid-kleebised-foto-vinuulkleebised-polaroid-minipere-kaunistatud-kleebised-fotod-isetegemise-sisustuskomplekt-dekoorkunst",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768248115538",
+      "path": "/et/collections/parimad-muujad/products/50x-leopard-animal-skin-sticker-pack-of-75820",
+      "target": "/et/products/50x-leopardloomanahast-kleebiste-pakk-gepardi-nahast-prindikleebised-vinuulumbriskleebised-armsad-kohakunstid-tudrukutele-ulekandekleebised",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768245789010",
+      "path": "/et/collections/parimad-muujad/products/custom-car-hood-vinyl-sticker-wrap-for-55626",
+      "target": "/et/products/kohandatud-auto-kapoti-vinuulist-kleebisumbris-veoauto-kunstikleebise-jaoks-taisgraafiline-voidusoidu-sport-pimendav-disain-seinamaal",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768249491794",
+      "path": "/et/collections/parimad-muujad/products/wall-frame-sticker-picture-frames-72348",
+      "target": "/et/products/seinaraam-kleebis-pildiraamid-kleebised-foto-vinuulkleebised-polaroid-minipere-kaunistatud-kleebised-fotod-isetegemise-sisustuskomplekt-dekoorkunst",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768245854546",
+      "path": "/et/collections/seinakleebised/products/lion-head-wall-vinyl-sticker-roar-32474",
+      "target": "/et/products/lovipea-seina-vinuulkleebis-moirgama-loom-kuningas-nagu-aken-kunst-dekoor-siluett-kleebis-vau-tatoveering-pulk-sulearvutil-unikaalne-ruumi-print",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768248148306",
+      "path": "/et/collections/wall-decals-canada/products/50x-leopard-animal-skin-sticker-pack-of-75820",
+      "target": "/et/products/50x-leopardloomanahast-kleebiste-pakk-gepardi-nahast-prindikleebised-vinuulumbriskleebised-armsad-kohakunstid-tudrukutele-ulekandekleebised",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768245920082",
+      "path": "/et/collections/wall-decals-canada/products/custom-car-hood-vinyl-sticker-wrap-for-55626",
+      "target": "/et/products/kohandatud-auto-kapoti-vinuulist-kleebisumbris-veoauto-kunstikleebise-jaoks-taisgraafiline-voidusoidu-sport-pimendav-disain-seinamaal",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246018386",
+      "path": "/et/collections/wall-decals-canada/products/nespresso-coffee-capsule-holder-3d-23552",
+      "target": "/et/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768248246610",
+      "path": "/et/collections/wall-decals-canada/products/thinking-panda-sticker-inspired-by-30786",
+      "target": "/et/products/motlev-panda-kleebis-inspireeritud-banksy-kunstist-vinuul-dj-baksy-seinakleebis-korvaklapid-pandakaru-muusika-motleja-tanavagrafiti-nutikas-seinamaaling",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768249524562",
+      "path": "/et/collections/wall-decals-canada/products/wall-frame-sticker-picture-frames-72348",
+      "target": "/et/products/seinaraam-kleebis-pildiraamid-kleebised-foto-vinuulkleebised-polaroid-minipere-kaunistatud-kleebised-fotod-isetegemise-sisustuskomplekt-dekoorkunst",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768248279378",
+      "path": "/et/products/50x-leopard-animal-skin-sticker-pack-of-75820",
+      "target": "/et/products/50x-leopardloomanahast-kleebiste-pakk-gepardi-nahast-prindikleebised-vinuulumbriskleebised-armsad-kohakunstid-tudrukutele-ulekandekleebised",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246116690",
+      "path": "/et/products/custom-car-hood-vinyl-sticker-wrap-for-55626",
+      "target": "/et/products/kohandatud-auto-kapoti-vinuulist-kleebisumbris-veoauto-kunstikleebise-jaoks-taisgraafiline-voidusoidu-sport-pimendav-disain-seinamaal",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246280530",
+      "path": "/et/products/lion-head-wall-vinyl-sticker-roar-32474",
+      "target": "/et/products/lovipea-seina-vinuulkleebis-moirgama-loom-kuningas-nagu-aken-kunst-dekoor-siluett-kleebis-vau-tatoveering-pulk-sulearvutil-unikaalne-ruumi-print",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246346066",
+      "path": "/et/products/nespresso-coffee-capsule-holder-3d-23552",
+      "target": "/et/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246378834",
+      "path": "/et/products/nespresso-coffee-capsule-holder-3d-23552?variant=50145384726866",
+      "target": "/et/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246411602",
+      "path": "/et/products/nespresso-coffee-capsule-holder-3d-23552?variant=50145384956242",
+      "target": "/et/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246444370",
+      "path": "/et/products/nespresso-coffee-capsule-holder-3d-23552?variant=50145384989010",
+      "target": "/et/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768246477138",
+      "path": "/et/products/nespresso-coffee-capsule-holder-3d-23552?variant=50145385021778",
+      "target": "/et/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768248377682",
+      "path": "/et/products/thinking-panda-sticker-inspired-by-30786",
+      "target": "/et/products/motlev-panda-kleebis-inspireeritud-banksy-kunstist-vinuul-dj-baksy-seinakleebis-korvaklapid-pandakaru-muusika-motleja-tanavagrafiti-nutikas-seinamaaling",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1768249557330",
+      "path": "/et/products/wall-frame-sticker-picture-frames-72348",
+      "target": "/et/products/seinaraam-kleebis-pildiraamid-kleebised-foto-vinuulkleebised-polaroid-minipere-kaunistatud-kleebised-fotod-isetegemise-sisustuskomplekt-dekoorkunst",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1744517824850",
+      "path": "/products/nespresso-coffee-capsule-holder-3d-23552",
+      "target": "/products/3d-printed-coffee-capsule-holder-pod-organizer",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1498710638930",
+      "path": "/ru/collections/custom-personalized/products/custom-mirror-decal-personalized-text-quote-glass-sticker-vinyl-customized-letter-window-decals-create-customize-saying-stickers_1420597930_",
+      "target": "/products/custom-mirror-decal-personalized-text-quote-glass-sticker-vinyl-customized-letter-window-decals-create-customize-saying-stickers_1420597930_",
+      "status": "missing_product",
+      "problem": "missing_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1748693811538",
+      "path": "/products/frosted-fanlight-door-number-decal-67794",
+      "target": "/products/frosted-fanlight-door-number-decal-etched-glass-house-number-sticker",
+      "status": "non_active_product",
+      "problem": "non_active_product"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1746243846482",
+      "path": "/sitemap_index.xml",
+      "target": "/sitemap.xml",
+      "status": "unknown_internal_route",
+      "problem": "unknown_internal_route"
+    }
+  ],
+  "probable_query_stripped_chains": [],
+  "duplicate_source_paths": {},
+  "external_targets": [
+    {
+      "id": "gid://shopify/UrlRedirect/1628135326034",
+      "path": "/llm.txt",
+      "target": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/Llm.txt?v=1768831312",
+      "status": "external_target"
+    },
+    {
+      "id": "gid://shopify/UrlRedirect/1769319170386",
+      "path": "/temp-chatgpt-bulk-10530660712786",
+      "target": "https://storage.googleapis.com/shopify-tiers-assets-prod-us-east1/bulk-operation-outputs/5b1cc3c67ffd08eb4d4b2c300ade?GoogleAccessId=assets-us-prod@shopify-tiers.iam.gserviceaccount.com&Expires=1789215872&Signature=IX9TQAAA7Zq6cw6PY7fvF4cTEBY%2Basr6C7Gb4wIBnj7bKv%2BGxdAv9ch7eHs9Qj2NYEkLDF7Ms/O2MLBzVfb/noaqBqM67VPn2MPVBxm6i8JCAvW%2BEJof/KeotFRm0SIJrlUpUMbrgUxzArGzp%2B/8dUAI63eQ6xLnepNZC9nkX4CTMBg9tH%2ByWvJl9VPNIUwUNpbhXs1IL2C5OE7AF9USWFI%2BJceqVvdpauITzBqaPCKWLWpP0kcghaNLpIUpytalt%2BWkvNEgImqdTmUgGAunUPLOjVzWk08lzWwg7kUV7miGoZQ5Oxk6es3dJ1uG7By29Slh6YSB9v1AocfZim9k3g==&response-content-disposition=attachment%3B+filename=%22staging-bulk-10530660712786.jsonl%22%3B+filename*=UTF-8''staging-bulk-10530660712786.jsonl&response-content-type=application/jsonl",
+      "status": "external_target"
+    }
+  ]
+}
