@@ -1,0 +1,340 @@
+{
+  "results": [
+    {
+      "page_type": "home",
+      "requested_url": "https://www.decords.eu/",
+      "status": 200,
+      "final_url": "https://www.decords.eu/",
+      "html_lang": "ru",
+      "canonical": [
+        "https://www.decords.eu/"
+      ],
+      "hreflang": [
+        {
+          "hreflang": "x-default",
+          "href": "https://www.decords.com/"
+        },
+        {
+          "hreflang": "en",
+          "href": "https://www.decords.com/"
+        },
+        {
+          "hreflang": "ru",
+          "href": "https://www.decords.com/ru"
+        },
+        {
+          "hreflang": "et",
+          "href": "https://www.decords.com/et"
+        },
+        {
+          "hreflang": "de",
+          "href": "https://www.decords.com/de"
+        },
+        {
+          "hreflang": "et-EE",
+          "href": "https://www.seinakleebised.ee/"
+        },
+        {
+          "hreflang": "de-EE",
+          "href": "https://www.seinakleebised.ee/de"
+        },
+        {
+          "hreflang": "en-EE",
+          "href": "https://www.seinakleebised.ee/en"
+        },
+        {
+          "hreflang": "de-DE",
+          "href": "https://www.decords.de/"
+        },
+        {
+          "hreflang": "et-DE",
+          "href": "https://www.decords.de/et"
+        },
+        {
+          "hreflang": "en-DE",
+          "href": "https://www.decords.de/en"
+        }
+      ]
+    },
+    {
+      "page_type": "product",
+      "requested_url": "https://www.decords.eu/products/svetyashchayasya-nakleyka-baby-on-board",
+      "status": 200,
+      "final_url": "https://www.decords.eu/products/svetyashchayasya-nakleyka-baby-on-board",
+      "html_lang": "ru",
+      "canonical": [
+        "https://www.decords.eu/products/svetyashchayasya-nakleyka-baby-on-board"
+      ],
+      "hreflang": [
+        {
+          "hreflang": "x-default",
+          "href": "https://www.decords.com/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost"
+        },
+        {
+          "hreflang": "en",
+          "href": "https://www.decords.com/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost"
+        },
+        {
+          "hreflang": "ru",
+          "href": "https://www.decords.com/ru/products/svetyashchayasya-nakleyka-baby-on-board"
+        },
+        {
+          "hreflang": "et",
+          "href": "https://www.decords.com/et/products/helendab-pimedas-beebi-pardal-naljakas-auto-vinuulkleebis-oo-helendav-laps-turvaakna-sees-kleebis-realistlik-helendav-valguse-kummitus"
+        },
+        {
+          "hreflang": "de",
+          "href": "https://www.decords.com/de/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost"
+        },
+        {
+          "hreflang": "et-EE",
+          "href": "https://www.seinakleebised.ee/products/helendab-pimedas-beebi-pardal-naljakas-auto-vinuulkleebis-oo-helendav-laps-turvaakna-sees-kleebis-realistlik-helendav-valguse-kummitus"
+        },
+        {
+          "hreflang": "de-EE",
+          "href": "https://www.seinakleebised.ee/de/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost"
+        },
+        {
+          "hreflang": "en-EE",
+          "href": "https://www.seinakleebised.ee/en/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost"
+        },
+        {
+          "hreflang": "de-DE",
+          "href": "https://www.decords.de/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost"
+        },
+        {
+          "hreflang": "et-DE",
+          "href": "https://www.decords.de/et/products/helendab-pimedas-beebi-pardal-naljakas-auto-vinuulkleebis-oo-helendav-laps-turvaakna-sees-kleebis-realistlik-helendav-valguse-kummitus"
+        },
+        {
+          "hreflang": "en-DE",
+          "href": "https://www.decords.de/en/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost"
+        }
+      ]
+    },
+    {
+      "page_type": "collection",
+      "requested_url": "https://www.decords.eu/collections/nakleyki-po-poverhnosti",
+      "status": 200,
+      "final_url": "https://www.decords.eu/collections/nakleyki-po-poverhnosti",
+      "html_lang": "ru",
+      "canonical": [
+        "https://www.decords.eu/collections/nakleyki-po-poverhnosti"
+      ],
+      "hreflang": [
+        {
+          "hreflang": "x-default",
+          "href": "https://www.decords.com/collections/stickers-and-decals"
+        },
+        {
+          "hreflang": "en",
+          "href": "https://www.decords.com/collections/stickers-and-decals"
+        },
+        {
+          "hreflang": "ru",
+          "href": "https://www.decords.com/ru/collections/nakleyki-po-poverhnosti"
+        },
+        {
+          "hreflang": "et",
+          "href": "https://www.decords.com/et/collections/kleebised-ja-kleebised"
+        },
+        {
+          "hreflang": "de",
+          "href": "https://www.decords.com/de/collections/stickers-and-decals"
+        },
+        {
+          "hreflang": "et-EE",
+          "href": "https://www.seinakleebised.ee/collections/kleebised-ja-kleebised"
+        },
+        {
+          "hreflang": "de-EE",
+          "href": "https://www.seinakleebised.ee/de/collections/stickers-and-decals"
+        },
+        {
+          "hreflang": "en-EE",
+          "href": "https://www.seinakleebised.ee/en/collections/stickers-and-decals"
+        },
+        {
+          "hreflang": "de-DE",
+          "href": "https://www.decords.de/collections/stickers-and-decals"
+        },
+        {
+          "hreflang": "et-DE",
+          "href": "https://www.decords.de/et/collections/kleebised-ja-kleebised"
+        },
+        {
+          "hreflang": "en-DE",
+          "href": "https://www.decords.de/en/collections/stickers-and-decals"
+        }
+      ]
+    },
+    {
+      "page_type": "page",
+      "requested_url": "https://www.decords.eu/pages/vozvrat-i-vozmeshchenie",
+      "status": 200,
+      "final_url": "https://www.decords.eu/pages/vozvrat-i-vozmeshchenie",
+      "html_lang": "ru",
+      "canonical": [
+        "https://www.decords.eu/pages/vozvrat-i-vozmeshchenie"
+      ],
+      "hreflang": [
+        {
+          "hreflang": "x-default",
+          "href": "https://www.decords.com/pages/refund-policy"
+        },
+        {
+          "hreflang": "en",
+          "href": "https://www.decords.com/pages/refund-policy"
+        },
+        {
+          "hreflang": "ru",
+          "href": "https://www.decords.com/ru/pages/vozvrat-i-vozmeshchenie"
+        },
+        {
+          "hreflang": "et",
+          "href": "https://www.decords.com/et/pages/tagastamispoliitika"
+        },
+        {
+          "hreflang": "de",
+          "href": "https://www.decords.com/de/pages/refund-policy"
+        },
+        {
+          "hreflang": "et-EE",
+          "href": "https://www.seinakleebised.ee/pages/tagastamispoliitika"
+        },
+        {
+          "hreflang": "de-EE",
+          "href": "https://www.seinakleebised.ee/de/pages/refund-policy"
+        },
+        {
+          "hreflang": "en-EE",
+          "href": "https://www.seinakleebised.ee/en/pages/refund-policy"
+        },
+        {
+          "hreflang": "de-DE",
+          "href": "https://www.decords.de/pages/refund-policy"
+        },
+        {
+          "hreflang": "et-DE",
+          "href": "https://www.decords.de/et/pages/tagastamispoliitika"
+        },
+        {
+          "hreflang": "en-DE",
+          "href": "https://www.decords.de/en/pages/refund-policy"
+        }
+      ]
+    },
+    {
+      "page_type": "article",
+      "requested_url": "https://www.decords.eu/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide",
+      "status": 200,
+      "final_url": "https://www.decords.eu/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide",
+      "html_lang": "ru",
+      "canonical": [
+        "https://www.decords.eu/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+      ],
+      "hreflang": [
+        {
+          "hreflang": "x-default",
+          "href": "https://www.decords.com/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        },
+        {
+          "hreflang": "en",
+          "href": "https://www.decords.com/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        },
+        {
+          "hreflang": "ru",
+          "href": "https://www.decords.com/ru/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        },
+        {
+          "hreflang": "et",
+          "href": "https://www.decords.com/et/blogs/meisterdamine-dekooridega/kuidas-kasutada-ulekandekilega-seinakleebiseid-juhend-algajatele"
+        },
+        {
+          "hreflang": "de",
+          "href": "https://www.decords.com/de/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        },
+        {
+          "hreflang": "et-EE",
+          "href": "https://www.seinakleebised.ee/blogs/meisterdamine-dekooridega/kuidas-kasutada-ulekandekilega-seinakleebiseid-juhend-algajatele"
+        },
+        {
+          "hreflang": "de-EE",
+          "href": "https://www.seinakleebised.ee/de/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        },
+        {
+          "hreflang": "en-EE",
+          "href": "https://www.seinakleebised.ee/en/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        },
+        {
+          "hreflang": "de-DE",
+          "href": "https://www.decords.de/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        },
+        {
+          "hreflang": "et-DE",
+          "href": "https://www.decords.de/et/blogs/meisterdamine-dekooridega/kuidas-kasutada-ulekandekilega-seinakleebiseid-juhend-algajatele"
+        },
+        {
+          "hreflang": "en-DE",
+          "href": "https://www.decords.de/en/blogs/craft-with-decords/how-to-use-wall-stickers-with-transfer-film-the-beginners-guide"
+        }
+      ]
+    },
+    {
+      "page_type": "blog",
+      "requested_url": "https://www.decords.eu/blogs/craft-with-decords",
+      "status": 200,
+      "final_url": "https://www.decords.eu/blogs/craft-with-decords",
+      "html_lang": "ru",
+      "canonical": [
+        "https://www.decords.eu/blogs/craft-with-decords"
+      ],
+      "hreflang": [
+        {
+          "hreflang": "x-default",
+          "href": "https://www.decords.com/blogs/craft-with-decords"
+        },
+        {
+          "hreflang": "en",
+          "href": "https://www.decords.com/blogs/craft-with-decords"
+        },
+        {
+          "hreflang": "ru",
+          "href": "https://www.decords.com/ru/blogs/craft-with-decords"
+        },
+        {
+          "hreflang": "et",
+          "href": "https://www.decords.com/et/blogs/meisterdamine-dekooridega"
+        },
+        {
+          "hreflang": "de",
+          "href": "https://www.decords.com/de/blogs/craft-with-decords"
+        },
+        {
+          "hreflang": "et-EE",
+          "href": "https://www.seinakleebised.ee/blogs/meisterdamine-dekooridega"
+        },
+        {
+          "hreflang": "de-EE",
+          "href": "https://www.seinakleebised.ee/de/blogs/craft-with-decords"
+        },
+        {
+          "hreflang": "en-EE",
+          "href": "https://www.seinakleebised.ee/en/blogs/craft-with-decords"
+        },
+        {
+          "hreflang": "de-DE",
+          "href": "https://www.decords.de/blogs/craft-with-decords"
+        },
+        {
+          "hreflang": "et-DE",
+          "href": "https://www.decords.de/et/blogs/meisterdamine-dekooridega"
+        },
+        {
+          "hreflang": "en-DE",
+          "href": "https://www.decords.de/en/blogs/craft-with-decords"
+        }
+      ]
+    }
+  ]
+}
