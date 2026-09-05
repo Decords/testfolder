@@ -1,0 +1,211 @@
+name: Verify redirect targets 2026-09-05
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-redirect-targets-20260905.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check redirect sources and targets over HTTP
+        run: |
+          python - <<'PY'
+          import csv
+          import html
+          import json
+          import re
+          import time
+          from concurrent.futures import ThreadPoolExecutor, as_completed
+          from pathlib import Path
+          from urllib.parse import urljoin, urlsplit
+
+          import requests
+
+          DATE = '2026-09-05'
+          INPUT = Path(f'audits/technical-redirect-unknown-targets-{DATE}.tsv')
+          OUT_TSV = Path(f'audits/technical-redirect-http-verification-{DATE}.tsv')
+          OUT_JSON = Path(f'audits/technical-redirect-http-verification-{DATE}.json')
+          OUT_MD = Path(f'audits/technical-redirect-http-verification-{DATE}.md')
+          BASE = 'https://www.decords.com'
+          MARKET_DOMAINS = {
+              'et': 'https://seinakleebised.ee',
+              'de': 'https://www.decords.de',
+              'ru': 'https://www.decords.eu',
+          }
+          LANG_HEADERS = {
+              'et': 'et-EE,et;q=0.9,en;q=0.7',
+              'de': 'de-DE,de;q=0.9,en;q=0.7',
+              'ru': 'ru-RU,ru;q=0.9,en;q=0.7',
+          }
+          UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/152.0 Safari/537.36 DecordsTechnicalAudit/2.0'
+          TITLE_RE = re.compile(r'<title[^>]*>(.*?)</title>', re.I | re.S)
+          CANONICAL_RE = re.compile(r'<link[^>]+rel=["\'][^"\']*canonical[^"\']*["\'][^>]+href=["\']([^"\']+)', re.I)
+          CANONICAL_RE_REV = re.compile(r'<link[^>]+href=["\']([^"\']+)["\'][^>]+rel=["\'][^"\']*canonical[^"\']*["\']', re.I)
+          HREFLANG_RE = re.compile(r'<link[^>]+rel=["\'][^"\']*alternate[^"\']*["\'][^>]+hreflang=["\']([^"\']+)["\'][^>]+href=["\']([^"\']+)', re.I)
+
+          rows = list(csv.DictReader(INPUT.open(encoding='utf-8'), delimiter='\t'))
+
+          def prefix(path):
+              parts = [p for p in urlsplit(path).path.split('/') if p]
+              return parts[0].lower() if parts and parts[0].lower() in MARKET_DOMAINS else ''
+
+          def stripped_locale_path(path):
+              parsed = urlsplit(path)
+              parts = [p for p in parsed.path.split('/') if p]
+              if parts and parts[0].lower() in MARKET_DOMAINS:
+                  parts = parts[1:]
+              result = '/' + '/'.join(parts)
+              if parsed.query:
+                  result += '?' + parsed.query
+              return result or '/'
+
+          def candidate_urls(path):
+              code = prefix(path)
+              urls = [('primary', urljoin(BASE, path))]
+              if code:
+                  market = MARKET_DOMAINS[code]
+                  urls.append(('market_exact', urljoin(market, path)))
+                  urls.append(('market_clean', urljoin(market, stripped_locale_path(path))))
+              unique = []
+              seen = set()
+              for label, url in urls:
+                  if url not in seen:
+                      seen.add(url)
+                      unique.append((label, url))
+              return unique
+
+          def fetch(url, language=''):
+              headers = {'User-Agent': UA, 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
+              if language:
+                  headers['Accept-Language'] = LANG_HEADERS.get(language, 'en-US,en;q=0.9')
+              last_error = ''
+              for attempt in range(3):
+                  try:
+                      response = requests.get(url, headers=headers, timeout=35, allow_redirects=True)
+                      if response.status_code in {429, 502, 503, 504} and attempt < 2:
+                          time.sleep(1.5 * (attempt + 1))
+                          continue
+                      text = response.text[:300000] if 'text' in response.headers.get('content-type', '').lower() or 'html' in response.headers.get('content-type', '').lower() or 'xml' in response.headers.get('content-type', '').lower() else ''
+                      title_match = TITLE_RE.search(text)
+                      title = html.unescape(re.sub(r'\s+', ' ', title_match.group(1)).strip()) if title_match else ''
+                      canonical_match = CANONICAL_RE.search(text) or CANONICAL_RE_REV.search(text)
+                      canonical = html.unescape(canonical_match.group(1).strip()) if canonical_match else ''
+                      hreflangs = HREFLANG_RE.findall(text)
+                      history = [{'status': item.status_code, 'url': item.url, 'location': item.headers.get('location', '')} for item in response.history]
+                      soft_404 = response.status_code == 200 and any(token in title.lower() for token in ['404', 'page not found', 'seite nicht gefunden', 'lehte ei leitud', 'страница не найдена'])
+                      return {
+                          'requested_url': url,
+                          'status': response.status_code,
+                          'final_url': response.url,
+                          'history': history,
+                          'history_codes': '>'.join(str(item['status']) for item in history),
+                          'content_type': response.headers.get('content-type', ''),
+                          'title': title,
+                          'canonical': canonical,
+                          'hreflang_count': len(hreflangs),
+                          'soft_404': soft_404,
+                          'ok': response.status_code == 200 and not soft_404,
+                          'error': '',
+                      }
+                  except Exception as exc:
+                      last_error = f'{type(exc).__name__}: {exc}'
+                      if attempt < 2:
+                          time.sleep(1.0 * (attempt + 1))
+              return {
+                  'requested_url': url, 'status': 0, 'final_url': '', 'history': [],
+                  'history_codes': '', 'content_type': '', 'title': '', 'canonical': '',
+                  'hreflang_count': 0, 'soft_404': False, 'ok': False, 'error': last_error,
+              }
+
+          def check(row):
+              language = prefix(row['target']) or prefix(row['path'])
+              source_checks = [(label, fetch(url, language)) for label, url in candidate_urls(row['path'])]
+              target_checks = [(label, fetch(url, language)) for label, url in candidate_urls(row['target'])]
+              best_source = next((item for item in source_checks if item[1]['ok']), source_checks[0])
+              best_target = next((item for item in target_checks if item[1]['ok']), target_checks[0])
+              return {
+                  **row,
+                  'language_prefix': language,
+                  'source_checks': [{'label': label, **result} for label, result in source_checks],
+                  'target_checks': [{'label': label, **result} for label, result in target_checks],
+                  'source_ok': any(result['ok'] for _, result in source_checks),
+                  'target_ok': any(result['ok'] for _, result in target_checks),
+                  'best_source_label': best_source[0],
+                  'best_source_status': best_source[1]['status'],
+                  'best_source_final_url': best_source[1]['final_url'],
+                  'best_target_label': best_target[0],
+                  'best_target_status': best_target[1]['status'],
+                  'best_target_final_url': best_target[1]['final_url'],
+                  'best_target_canonical': best_target[1]['canonical'],
+                  'best_target_hreflang_count': best_target[1]['hreflang_count'],
+                  'verified_ok': any(result['ok'] for _, result in target_checks),
+              }
+
+          checked = []
+          with ThreadPoolExecutor(max_workers=6) as pool:
+              futures = [pool.submit(check, row) for row in rows]
+              for future in as_completed(futures):
+                  checked.append(future.result())
+          checked.sort(key=lambda item: (not item['verified_ok'], item['problem'], item['path']))
+
+          summary = {
+              'checked_redirects': len(checked),
+              'verified_target_ok': sum(1 for item in checked if item['target_ok']),
+              'verified_source_resolves': sum(1 for item in checked if item['source_ok']),
+              'unresolved_targets': sum(1 for item in checked if not item['target_ok']),
+              'unresolved_sources': sum(1 for item in checked if not item['source_ok']),
+              'localized_rows': sum(1 for item in checked if item['language_prefix']),
+              'localized_verified_ok': sum(1 for item in checked if item['language_prefix'] and item['target_ok']),
+          }
+
+          OUT_JSON.write_text(json.dumps({'summary': summary, 'results': checked}, ensure_ascii=False, indent=2), encoding='utf-8')
+
+          fields = [
+              'problem', 'id', 'path', 'target', 'language_prefix',
+              'source_ok', 'best_source_status', 'best_source_label', 'best_source_final_url',
+              'target_ok', 'best_target_status', 'best_target_label', 'best_target_final_url',
+              'best_target_canonical', 'best_target_hreflang_count',
+          ]
+          with OUT_TSV.open('w', encoding='utf-8', newline='') as fh:
+              writer = csv.DictWriter(fh, fieldnames=fields, delimiter='\t', extrasaction='ignore')
+              writer.writeheader()
+              writer.writerows(checked)
+
+          lines = [
+              f'# Redirect HTTP verification — {DATE}', '',
+              '| Metric | Count |', '|---|---:|',
+              f"| Checked redirects | {summary['checked_redirects']} |",
+              f"| Targets verified over HTTP | {summary['verified_target_ok']} |",
+              f"| Sources resolving to a live page | {summary['verified_source_resolves']} |",
+              f"| Unresolved targets | {summary['unresolved_targets']} |",
+              f"| Localized rows | {summary['localized_rows']} |",
+              f"| Localized rows verified | {summary['localized_verified_ok']} |",
+              '', '## Unresolved', '',
+              '| Problem | Source | Target | Source status | Target status |',
+              '|---|---|---|---:|---:|',
+          ]
+          for item in checked:
+              if not item['target_ok']:
+                  lines.append(f"| `{item['problem']}` | `{item['path']}` | `{item['target']}` | {item['best_source_status']} | {item['best_target_status']} |")
+          OUT_MD.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          print(json.dumps(summary, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit verification outputs
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add audits/technical-redirect-http-verification-2026-09-05.json \
+                  audits/technical-redirect-http-verification-2026-09-05.tsv \
+                  audits/technical-redirect-http-verification-2026-09-05.md
+          git commit -m "Verify unresolved redirect targets over HTTP" || exit 0
+          git push
