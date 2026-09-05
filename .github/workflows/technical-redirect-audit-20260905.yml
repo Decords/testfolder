@@ -1,0 +1,422 @@
+name: Technical redirect audit 2026-09-05
+
+on:
+  push:
+    paths:
+      - '.github/workflows/technical-redirect-audit-20260905.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Audit Shopify redirects against live resources
+        env:
+          EXPORT_URL: https://cdn.shopify.com/s/files/1/0608/0888/8570/files/3484ed6e6ea5c53a299a6ef619bc?v=1788617439
+        run: |
+          python - <<'PY'
+          import csv
+          import io
+          import json
+          import os
+          import re
+          import urllib.request
+          from collections import Counter, defaultdict
+          from pathlib import Path
+          from urllib.parse import unquote, urlsplit
+
+          OUT_DIR = Path('audits')
+          OUT_DIR.mkdir(exist_ok=True)
+          DATE = '2026-09-05'
+          STORE_HOSTS = {
+              'decords.com', 'www.decords.com',
+              'decords.eu', 'www.decords.eu',
+              'decords.de', 'www.decords.de',
+              'seinakleebised.ee', 'www.seinakleebised.ee',
+              'decordsstore.myshopify.com',
+          }
+          BLOG_HANDLES = {'craft-with-decords'}
+          LOCALE_PREFIX_RE = re.compile(r'^/(?:[a-z]{2}|[a-z]{2}-[a-z]{2})(?=/)', re.I)
+
+          req = urllib.request.Request(
+              os.environ['EXPORT_URL'],
+              headers={'User-Agent': 'DecordsTechnicalAudit/2.0'},
+          )
+          objects = []
+          with urllib.request.urlopen(req, timeout=180) as response:
+              for raw in response:
+                  raw = raw.strip()
+                  if raw:
+                      objects.append(json.loads(raw))
+
+          by_type = defaultdict(list)
+          for obj in objects:
+              by_type[obj.get('__typename', 'UNKNOWN')].append(obj)
+
+          redirects = by_type['UrlRedirect']
+          products = by_type['Product']
+          collections = by_type['Collection']
+          pages = by_type['Page']
+          articles = by_type['Article']
+
+          product_status = {p['handle'].lower(): p.get('status') for p in products if p.get('handle')}
+          collection_handles = {c['handle'].lower() for c in collections if c.get('handle')}
+          page_published = {p['handle'].lower(): bool(p.get('isPublished')) for p in pages if p.get('handle')}
+          article_published = {}
+          for article in articles:
+              blog = article.get('blog') or {}
+              if article.get('handle') and blog.get('handle'):
+                  article_published[(blog['handle'].lower(), article['handle'].lower())] = bool(article.get('isPublished'))
+
+          path_groups = defaultdict(list)
+          for redirect in redirects:
+              path_groups[redirect.get('path', '')].append(redirect)
+          duplicate_paths = {path: rows for path, rows in path_groups.items() if path and len(rows) > 1}
+          redirect_by_path = {path: rows[0] for path, rows in path_groups.items() if path}
+
+          def internal_path(value):
+              if value is None:
+                  return None
+              value = str(value).strip()
+              if not value:
+                  return ''
+              if value.startswith('//'):
+                  value = 'https:' + value
+              parsed = urlsplit(value)
+              if parsed.scheme or parsed.netloc:
+                  host = parsed.netloc.lower().split(':', 1)[0]
+                  if host not in STORE_HOSTS:
+                      return None
+                  result = parsed.path or '/'
+                  if parsed.query:
+                      result += '?' + parsed.query
+                  return result
+              if value.startswith('/'):
+                  return value
+              return ''
+
+          def remove_fragment_and_query(path):
+              if path is None:
+                  return None
+              return urlsplit(path).path or '/'
+
+          def strip_locale(path):
+              stripped = LOCALE_PREFIX_RE.sub('', path, count=1)
+              return stripped or '/'
+
+          def candidate_handles(segment):
+              raw = segment.strip('/').lower()
+              return {raw, unquote(raw)}
+
+          def validate_terminal(target):
+              internal = internal_path(target)
+              if internal is None:
+                  return True, 'external_target'
+              if internal == '':
+                  return False, 'blank_or_relative_target'
+              path = strip_locale(remove_fragment_and_query(internal))
+              if path == '/':
+                  return True, 'homepage'
+              if path == '/collections':
+                  return True, 'collection_index'
+              if path.startswith('/policies/'):
+                  return True, 'shopify_policy'
+              if path == '/search' or path.startswith('/search/'):
+                  return True, 'shopify_search'
+              if path == '/cart' or path.startswith('/cart/'):
+                  return True, 'shopify_cart'
+              if path == '/account' or path.startswith('/account/'):
+                  return True, 'shopify_account'
+
+              parts = [part for part in path.split('/') if part]
+              if not parts:
+                  return True, 'homepage'
+
+              if parts[0] == 'products' and len(parts) == 2:
+                  statuses = [product_status.get(h) for h in candidate_handles(parts[1])]
+                  if 'ACTIVE' in statuses:
+                      return True, 'active_product'
+                  if any(statuses):
+                      return False, 'non_active_product'
+                  return False, 'missing_product'
+
+              if parts[0] == 'collections' and len(parts) == 2:
+                  if any(h in collection_handles for h in candidate_handles(parts[1])):
+                      return True, 'existing_collection'
+                  return False, 'missing_collection'
+
+              if parts[0] == 'collections' and len(parts) == 4 and parts[2] == 'products':
+                  collection_ok = any(h in collection_handles for h in candidate_handles(parts[1]))
+                  statuses = [product_status.get(h) for h in candidate_handles(parts[3])]
+                  product_ok = 'ACTIVE' in statuses
+                  if collection_ok and product_ok:
+                      return True, 'collection_product_url'
+                  if not collection_ok and not product_ok:
+                      return False, 'missing_collection_and_product'
+                  if not collection_ok:
+                      return False, 'missing_collection'
+                  return False, 'missing_or_non_active_product'
+
+              if parts[0] == 'pages' and len(parts) == 2:
+                  values = [page_published.get(h) for h in candidate_handles(parts[1])]
+                  if True in values:
+                      return True, 'published_page'
+                  if False in values:
+                      return False, 'unpublished_page'
+                  return False, 'missing_page'
+
+              if parts[0] == 'blogs' and len(parts) == 2:
+                  return (parts[1].lower() in BLOG_HANDLES,
+                          'existing_blog' if parts[1].lower() in BLOG_HANDLES else 'missing_blog')
+
+              if parts[0] == 'blogs' and len(parts) == 3:
+                  blog = parts[1].lower()
+                  candidates = [(blog, h) for h in candidate_handles(parts[2])]
+                  values = [article_published.get(key) for key in candidates]
+                  if True in values:
+                      return True, 'published_article'
+                  if False in values:
+                      return False, 'unpublished_article'
+                  return False, 'missing_article'
+
+              if parts[0] == 'cdn':
+                  return False, 'cdn_asset_target'
+              return False, 'unknown_internal_route'
+
+          def resolve_exact(start_path, first_target):
+              seen = [start_path]
+              current = first_target
+              intermediates = []
+              while True:
+                  internal = internal_path(current)
+                  if internal is None or internal == '':
+                      return current, intermediates, None
+                  if internal not in redirect_by_path:
+                      return current, intermediates, None
+                  if internal in seen:
+                      cycle = seen[seen.index(internal):] + [internal]
+                      return current, intermediates, cycle
+                  seen.append(internal)
+                  intermediates.append(internal)
+                  current = redirect_by_path[internal].get('target', '')
+
+          chain_rows = []
+          cycle_rows = []
+          self_rows = []
+          unknown_rows = []
+          external_rows = []
+          valid_direct_rows = []
+          safe_updates = {}
+          source_query_count = 0
+          target_query_count = 0
+          probable_query_stripped_chains = []
+
+          for redirect in redirects:
+              rid = redirect.get('id')
+              path = redirect.get('path') or ''
+              target = redirect.get('target') or ''
+              if '?' in path:
+                  source_query_count += 1
+              if '?' in target:
+                  target_query_count += 1
+              if internal_path(target) == path:
+                  self_rows.append({'id': rid, 'path': path, 'target': target})
+                  continue
+
+              final, intermediates, cycle = resolve_exact(path, target)
+              if cycle:
+                  cycle_rows.append({'id': rid, 'path': path, 'target': target, 'cycle': cycle})
+                  continue
+
+              if intermediates:
+                  valid, reason = validate_terminal(final)
+                  row = {
+                      'id': rid,
+                      'path': path,
+                      'target': target,
+                      'final': final,
+                      'hops': len(intermediates),
+                      'intermediates': intermediates,
+                      'final_status': reason,
+                  }
+                  chain_rows.append(row)
+                  if valid and final != target:
+                      safe_updates[path] = {
+                          'id': rid,
+                          'path': path,
+                          'old_target': target,
+                          'new_target': final,
+                          'reason': 'redirect_chain',
+                          'hops_removed': len(intermediates),
+                      }
+                  elif not valid:
+                      unknown_rows.append(row | {'problem': 'chain_final_' + reason})
+                  continue
+
+              internal = internal_path(target)
+              if internal is not None and internal != '':
+                  path_only = remove_fragment_and_query(internal)
+                  if internal not in redirect_by_path and path_only in redirect_by_path:
+                      probable_query_stripped_chains.append({
+                          'id': rid, 'path': path, 'target': target,
+                          'probable_intermediate': path_only,
+                      })
+
+              valid, reason = validate_terminal(target)
+              row = {'id': rid, 'path': path, 'target': target, 'status': reason}
+              if reason == 'external_target':
+                  external_rows.append(row)
+              elif valid:
+                  valid_direct_rows.append(row)
+              else:
+                  unknown_rows.append(row | {'problem': reason})
+
+          # Preserve previously reviewed corrections when they are still pending and
+          # their proposed destination is currently valid.
+          prior_pending = []
+          prior_file = Path('redirect-fix-map.json')
+          if prior_file.exists():
+              prior = json.loads(prior_file.read_text(encoding='utf-8'))
+              for item in prior.get('updates', []):
+                  current = redirect_by_path.get(item.get('path'))
+                  if not current:
+                      continue
+                  if current.get('target') != item.get('old_target'):
+                      continue
+                  proposed = item.get('new_target') or ''
+                  final, intermediates, cycle = resolve_exact(item['path'], proposed)
+                  if cycle:
+                      continue
+                  valid, status = validate_terminal(final)
+                  if valid:
+                      update = {
+                          'id': current.get('id'),
+                          'path': item['path'],
+                          'old_target': current.get('target') or '',
+                          'new_target': final,
+                          'reason': 'previously_reviewed_correction',
+                          'hops_removed': len(intermediates),
+                      }
+                      safe_updates[item['path']] = update
+                      prior_pending.append(update | {'terminal_status': status})
+
+          problem_counts = Counter(row.get('problem', row.get('status', 'unknown')) for row in unknown_rows)
+          type_counts = {key: len(value) for key, value in sorted(by_type.items())}
+
+          report = {
+              'generated_at': DATE,
+              'source_url': os.environ['EXPORT_URL'],
+              'summary': {
+                  'export_objects': len(objects),
+                  'redirects': len(redirects),
+                  'products': len(products),
+                  'active_products': sum(1 for p in products if p.get('status') == 'ACTIVE'),
+                  'collections': len(collections),
+                  'pages': len(pages),
+                  'published_pages': sum(1 for p in pages if p.get('isPublished')),
+                  'articles': len(articles),
+                  'published_articles': sum(1 for a in articles if a.get('isPublished')),
+                  'duplicate_source_paths': len(duplicate_paths),
+                  'self_redirects': len(self_rows),
+                  'cycles': len(cycle_rows),
+                  'exact_chain_redirects': len(chain_rows),
+                  'safe_updates': len(safe_updates),
+                  'previously_reviewed_pending': len(prior_pending),
+                  'valid_direct_targets': len(valid_direct_rows),
+                  'external_targets': len(external_rows),
+                  'unknown_or_unpublished_targets': len(unknown_rows),
+                  'probable_query_stripped_chains': len(probable_query_stripped_chains),
+                  'source_paths_with_query': source_query_count,
+                  'targets_with_query': target_query_count,
+              },
+              'object_counts_by_type': type_counts,
+              'unknown_problem_counts': dict(problem_counts),
+              'safe_updates': [safe_updates[path] for path in sorted(safe_updates)],
+              'redirect_chains': sorted(chain_rows, key=lambda x: (x['path'], x['id'] or '')),
+              'cycles': cycle_rows,
+              'self_redirects': self_rows,
+              'unknown_or_unpublished_targets': sorted(unknown_rows, key=lambda x: (x.get('problem', ''), x['path'])),
+              'probable_query_stripped_chains': probable_query_stripped_chains,
+              'duplicate_source_paths': {
+                  path: [{'id': row.get('id'), 'target': row.get('target')} for row in rows]
+                  for path, rows in sorted(duplicate_paths.items())
+              },
+              'external_targets': external_rows,
+          }
+
+          audit_json = OUT_DIR / f'technical-redirect-audit-{DATE}.json'
+          fixes_json = OUT_DIR / f'technical-redirect-fixes-{DATE}.json'
+          unknown_tsv = OUT_DIR / f'technical-redirect-unknown-targets-{DATE}.tsv'
+          audit_md = OUT_DIR / f'technical-redirect-audit-{DATE}.md'
+
+          audit_json.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
+          fixes_json.write_text(json.dumps({
+              'summary': {
+                  'count': len(safe_updates),
+                  'chain_fixes': sum(1 for x in safe_updates.values() if x['reason'] == 'redirect_chain'),
+                  'previously_reviewed_fixes': sum(1 for x in safe_updates.values() if x['reason'] == 'previously_reviewed_correction'),
+              },
+              'updates': report['safe_updates'],
+          }, ensure_ascii=False, indent=2), encoding='utf-8')
+
+          with unknown_tsv.open('w', encoding='utf-8', newline='') as fh:
+              writer = csv.DictWriter(fh, fieldnames=['problem', 'id', 'path', 'target', 'final'], delimiter='\t', extrasaction='ignore')
+              writer.writeheader()
+              for row in report['unknown_or_unpublished_targets']:
+                  writer.writerow(row)
+
+          s = report['summary']
+          lines = [
+              f'# Technical redirect audit — {DATE}',
+              '',
+              '| Metric | Count |',
+              '|---|---:|',
+              f"| Redirects | {s['redirects']} |",
+              f"| Exact redirect chains | {s['exact_chain_redirects']} |",
+              f"| Safe updates prepared | {s['safe_updates']} |",
+              f"| Cycles | {s['cycles']} |",
+              f"| Self redirects | {s['self_redirects']} |",
+              f"| Duplicate source paths | {s['duplicate_source_paths']} |",
+              f"| Unknown or unpublished final targets | {s['unknown_or_unpublished_targets']} |",
+              f"| External targets | {s['external_targets']} |",
+              f"| Source paths containing query strings | {s['source_paths_with_query']} |",
+              '',
+              '## Unknown target categories',
+              '',
+              '| Category | Count |',
+              '|---|---:|',
+          ]
+          for key, value in sorted(problem_counts.items(), key=lambda item: (-item[1], item[0])):
+              lines.append(f'| `{key}` | {value} |')
+          lines.extend(['', '## Prepared safe updates', '', '| Path | Old target | New target | Reason |', '|---|---|---|---|'])
+          for item in report['safe_updates'][:200]:
+              lines.append(f"| `{item['path']}` | `{item['old_target']}` | `{item['new_target']}` | {item['reason']} |")
+          if len(report['safe_updates']) > 200:
+              lines.append(f"\nOnly the first 200 of {len(report['safe_updates'])} updates are shown here; see the JSON file for all rows.")
+          lines.extend(['', '## Unknown or unpublished targets', '', '| Problem | Path | Target |', '|---|---|---|'])
+          for item in report['unknown_or_unpublished_targets'][:200]:
+              lines.append(f"| `{item.get('problem', '')}` | `{item['path']}` | `{item.get('final', item.get('target', ''))}` |")
+          if len(report['unknown_or_unpublished_targets']) > 200:
+              lines.append(f"\nOnly the first 200 of {len(report['unknown_or_unpublished_targets'])} rows are shown here; see the TSV/JSON files for all rows.")
+          audit_md.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+          print(json.dumps(report['summary'], ensure_ascii=False, indent=2))
+          print(json.dumps(report['unknown_problem_counts'], ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit audit outputs
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add audits/technical-redirect-audit-2026-09-05.json \
+                  audits/technical-redirect-fixes-2026-09-05.json \
+                  audits/technical-redirect-unknown-targets-2026-09-05.tsv \
+                  audits/technical-redirect-audit-2026-09-05.md
+          git commit -m "Add full technical redirect audit for 2026-09-05" || exit 0
+          git push
