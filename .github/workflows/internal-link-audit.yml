@@ -1,4 +1,4 @@
-name: Temporary Estonia Option Localization Preparation
+name: Temporary Estonia Option Localization Upload
 
 on:
   push:
@@ -9,80 +9,31 @@ permissions:
   contents: write
 
 jobs:
-  prepare:
+  upload:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare localization variables
-        env:
-          EXPORT_URL: https://cdn.shopify.com/s/files/1/0608/0888/8570/files/af03431cdb07bead9a9b6140377a?v=1788611292
+      - name: Upload variables to Shopify staged storage
         run: |
-          python - <<'PY'
-          import hashlib,json,os,re,urllib.request
-          from pathlib import Path
-          MARKET='gid://shopify/Market/90602078546'
-          raw=urllib.request.urlopen(os.environ['EXPORT_URL'],timeout=60).read().decode()
-          products=[]
-          for line in raw.splitlines():
-              if not line.strip(): continue
-              obj=json.loads(line)
-              if isinstance(obj,dict) and str(obj.get('id','')).startswith('gid://shopify/Product/'):
-                  products.append(obj)
-          def existing_ok(items,value):
-              return any(t.get('key')=='name' and t.get('value')==value and t.get('outdated') is False for t in (items or []))
-          def is_inch_option(name):
-              low=(name or '').lower()
-              return any(w in low for w in ('size','width','height','length','diameter','dimension')) and ('(in' in low or 'inch' in low or low.endswith(' in')) and 'cm' not in low
-          def translated_option(name):
-              low=(name or '').lower()
-              if 'complete size' in low: return 'Valmis mõõt'
-              if 'design width' in low: return 'Kujunduse laius'
-              if 'decal height' in low: return 'Kleebise kõrgus'
-              if 'diameter' in low: return 'Läbimõõt'
-              if 'width' in low: return 'Laius'
-              if 'height' in low: return 'Kõrgus'
-              if 'length' in low: return 'Pikkus'
-              if 'dimension' in low: return 'Mõõdud'
-              return 'Mõõt'
-          def convert(value):
-              src=(value or '').strip(); low=src.lower()
-              if ('cm' in low or 'centimeter' in low) and ('inch' in low or re.search(r'\bin\b',low) or '"' in src): return None,'both'
-              m=re.match(r'^(\d+(?:\.\d+)?)\s*[x×X]\s*(\d+(?:\.\d+)?)\s*(.*)$',src)
-              if m:
-                  suffix=m.group(3).strip(); suffix=re.sub(r'\bsample\b','näidis',suffix,flags=re.I)
-                  return f"{int(float(m.group(1))*2.54+.5)} × {int(float(m.group(2))*2.54+.5)} cm"+(' '+suffix if suffix else ''),'ok'
-              m=re.match(r'^(\d+(?:\.\d+)?)\s*(?:inches|inch|in|\")?\s*(.*)$',src,re.I)
-              if m:
-                  suffix=m.group(2).strip(); suffix=re.sub(r'\bsample\b','näidis',suffix,flags=re.I)
-                  return f"{int(float(m.group(1))*2.54+.5)} cm"+(' '+suffix if suffix else ''),'ok'
-              return None,'skip'
-          changes=[]; stats={'productsChecked':len(products),'activePublished':0,'skippedProducts':0,'sizeOptionsChecked':0,'sizeValuesChecked':0,'bothUnitsSkipped':0,'alreadyCorrect':0}
-          for product in products:
-              if not (product.get('status')=='ACTIVE' and (product.get('onlineStoreUrl') or product.get('publishedAt'))):
-                  stats['skippedProducts']+=1; continue
-              stats['activePublished']+=1
-              for option in product.get('options') or []:
-                  source=str(option.get('name') or '')
-                  if not is_inch_option(source): continue
-                  stats['sizeOptionsChecked']+=1; expected=translated_option(source)
-                  if existing_ok(option.get('translations'),expected): stats['alreadyCorrect']+=1
-                  else: changes.append({'resourceId':option['id'],'translations':[{'locale':'et','key':'name','value':expected,'translatableContentDigest':hashlib.sha256(source.encode()).hexdigest(),'marketId':MARKET}],'productId':product['id'],'kind':'option'})
-                  for value in option.get('optionValues') or []:
-                      if value.get('hasVariants') is False: continue
-                      source=str(value.get('name') or ''); expected,state=convert(source)
-                      if state=='both': stats['bothUnitsSkipped']+=1; continue
-                      if state!='ok': continue
-                      stats['sizeValuesChecked']+=1
-                      if existing_ok(value.get('translations'),expected): stats['alreadyCorrect']+=1
-                      else: changes.append({'resourceId':value['id'],'translations':[{'locale':'et','key':'name','value':expected,'translatableContentDigest':hashlib.sha256(source.encode()).hexdigest(),'marketId':MARKET}],'productId':product['id'],'kind':'value'})
-          Path('tmp_shopify_et_mutations.jsonl').write_text('\n'.join(json.dumps({'resourceId':c['resourceId'],'translations':c['translations']},ensure_ascii=False,separators=(',',':')) for c in changes)+'\n',encoding='utf-8')
-          stats.update({'firstProductId':products[0]['id'],'lastProductId':products[-1]['id'],'changesPlanned':len(changes),'optionChanges':sum(c['kind']=='option' for c in changes),'valueChanges':sum(c['kind']=='value' for c in changes),'expected':{c['resourceId']:c['translations'][0]['value'] for c in changes}})
-          Path('tmp_shopify_et_manifest.json').write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding='utf-8')
-          PY
-      - name: Commit temporary outputs
+          STATUS=$(curl --silent --show-error --output upload-response.txt --write-out '%{http_code}' \
+            --request POST 'https://shopify-staged-uploads.storage.googleapis.com/' \
+            --form 'Content-Type=text/jsonl' \
+            --form 'success_action_status=201' \
+            --form 'acl=private' \
+            --form 'key=tmp/60808888570/bulk/6bb1593a-2e43-498a-9b5d-23c93928b5de/decords-et-options-next100-20260905.jsonl' \
+            --form 'x-goog-date=20260905T123852Z' \
+            --form 'x-goog-credential=merchant-assets@shopify-tiers.iam.gserviceaccount.com/20260905/auto/storage/goog4_request' \
+            --form 'x-goog-algorithm=GOOG4-RSA-SHA256' \
+            --form 'x-goog-signature=927018fcdb6a7052cf1115af5645709af92e6623212c447c6cc388477a020c0347b4096405f304612fde67c786d92fd4894c3168e10fa210be84bc6d379f57314459fd019288dc4a720525fc8e0865f4a94b97aa0b1bb652cbae4adabe3431b6552dfbca9d85bb267c695f231569badfbebd9331b4b68e6552720bfd0bda9a779e283e8e4e324c929323d6ad33a3a0715e7310f7cd7f91ccf7f9b209d3d9fb14dc9708695c102bba4d9dbeead09e575b328d52c78bbacf956856c6b58f84de6a1074b6068039feda8e2b35cf030a2fa49e7dfd4d9c1ab643202ae4510f2c11d0af5f7f5bbde4be88388b284548eb987d09cd95de790fed40e3ac6a0b863bdd55' \
+            --form 'policy=eyJjb25kaXRpb25zIjpbeyJDb250ZW50LVR5cGUiOiJ0ZXh0XC9qc29ubCJ9LHsic3VjY2Vzc19hY3Rpb25fc3RhdHVzIjoiMjAxIn0seyJhY2wiOiJwcml2YXRlIn0sWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMSwxMDQ4NTc2MDBdLHsiYnVja2V0Ijoic2hvcGlmeS1zdGFnZWQtdXBsb2FkcyJ9LHsia2V5IjoidG1wXC82MDgwODg4ODU3MFwvYnVsa1wvNmJiMTU5M2EtMmU0My00OThhLTliNWQtMjNjOTM5MjhiNWRlXC9kZWNvcmRzLWV0LW9wdGlvbnMtbmV4dDEwMC0yMDI2MDkwNS5qc29ubCJ9LHsieC1nb29nLWRhdGUiOiIyMDI2MDkwNVQxMjM4NTJaIn0seyJ4LWdvb2ctY3JlZGVudGlhbCI6Im1lcmNoYW50LWFzc2V0c0BzaG9waWZ5LXRpZXJzLmlhbS5nc2VydmljZWFjY291bnQuY29tXC8yMDI2MDkwNVwvYXV0b1wvc3RvcmFnZVwvZ29vZzRfcmVxdWVzdCJ9LHsieC1nb29nLWFsZ29yaXRobSI6IkdPT0c0LVJTQS1TSEEyNTYifV0sImV4cGlyYXRpb24iOiIyMDI2LTA5LTA2VDEyOjM4OjUyWiJ9' \
+            --form 'file=@tmp_shopify_et_mutations.jsonl;type=text/jsonl')
+          printf '%s\n' "$STATUS" > tmp_shopify_upload_status.txt
+          cat upload-response.txt >> tmp_shopify_upload_status.txt
+          test "$STATUS" = '201'
+      - name: Commit upload status
         run: |
           git config user.name "Decords Audit Bot"
           git config user.email "audit-bot@decords.com"
-          git add tmp_shopify_et_manifest.json tmp_shopify_et_mutations.jsonl
-          git commit -m "Add temporary Estonia option localization plan"
+          git add tmp_shopify_upload_status.txt
+          git commit -m "Record Shopify staged upload status"
           git push
