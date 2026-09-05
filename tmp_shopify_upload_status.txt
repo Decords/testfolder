@@ -1,0 +1,2 @@
+201
+<?xml version='1.0' encoding='UTF-8'?><PostResponse><Location>https://storage.googleapis.com/shopify-staged-uploads/tmp/60808888570/bulk/6bb1593a-2e43-498a-9b5d-23c93928b5de/decords-et-options-next100-20260905.jsonl</Location><Bucket>shopify-staged-uploads</Bucket><Key>tmp/60808888570/bulk/6bb1593a-2e43-498a-9b5d-23c93928b5de/decords-et-options-next100-20260905.jsonl</Key><ETag>"ac068e9fbea01257e3d57a07cdbb53db"</ETag></PostResponse>
