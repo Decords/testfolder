@@ -1,0 +1,228 @@
+name: Resolve localized redirects 2026-09-05
+
+on:
+  push:
+    paths:
+      - '.github/workflows/resolve-localized-redirects-20260905.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve redirect targets using Shopify translations
+        env:
+          TRANSLATION_EXPORT_URL: https://storage.googleapis.com/shopify-tiers-assets-prod-us-east1/bulk-operation-outputs/5b109861941a1663e433599edca7?GoogleAccessId=assets-us-prod%40shopify-tiers.iam.gserviceaccount.com&Expires=1789223930&Signature=LRAI2rFN%2Bix%2BD6DwpgOWfxA8NVropa7Fa%2BH%2BQ%2BvxFLUQtUGXjfkl7EQ5bsFVgQgpJbqjIHBsBdCl0UzbABYXhlHSbQrNu8DWj4Re0Mn2FRjxfrCk8%2B5EkDBy9vnn4T4ueU7L%2Baoc9Wu71AABW40kTi80zkLWC%2B33M%2BqcZiFF2omzr2aG8Joy7sLNctOoX3hxPVpqZuglzNOFTCuxe0nTTLp5DSC9lvmEQ0gn4Xy6Mg2AYyc%2FzBATqOuMz9HJubi1mUXI2WBB%2FHD7Lo368NH6mK5k%2F3IIx4j4se0MsZLaUYL1f9gbv%2BenmFqFkeXs%2BXNWaD%2BGAnLcZMld23jNfPVbtA%3D%3D&response-content-disposition=attachment%3B+filename%3D%22staging-bulk-10531485188434.jsonl%22%3B+filename%2A%3DUTF-8%27%27staging-bulk-10531485188434.jsonl&response-content-type=application%2Fjsonl
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          import os
+          import re
+          import urllib.request
+          from collections import Counter, defaultdict
+          from pathlib import Path
+          from urllib.parse import unquote, urlsplit
+
+          DATE = '2026-09-05'
+          OUT = Path('audits')
+          OUT.mkdir(exist_ok=True)
+          INPUT = OUT / f'technical-redirect-unknown-targets-{DATE}.tsv'
+          LOCALES = ('et', 'ru', 'de')
+          LOCALE_RE = re.compile(r'^/(et|ru|de)(?=/)', re.I)
+
+          req = urllib.request.Request(
+              os.environ['TRANSLATION_EXPORT_URL'],
+              headers={'User-Agent': 'DecordsTechnicalAudit/4.0'},
+          )
+          objects = []
+          with urllib.request.urlopen(req, timeout=240) as response:
+              for raw in response:
+                  raw = raw.strip()
+                  if raw:
+                      objects.append(json.loads(raw))
+
+          indexes = {
+              locale: {
+                  'Product': {},
+                  'Collection': {},
+                  'Page': {},
+                  'Article': {},
+              }
+              for locale in LOCALES
+          }
+          base_indexes = {
+              'Product': {},
+              'Collection': {},
+              'Page': {},
+              'Article': {},
+          }
+
+          def translation_handle(obj, locale):
+              for item in obj.get(locale + 'Translations', []) or []:
+                  if item.get('key') == 'handle' and item.get('value'):
+                      return item['value'].strip('/').lower(), bool(item.get('outdated'))
+              return '', False
+
+          for obj in objects:
+              kind = obj.get('__typename')
+              if kind not in base_indexes:
+                  continue
+              handle = (obj.get('handle') or '').strip('/').lower()
+              if handle:
+                  base_indexes[kind][handle] = obj
+              for locale in LOCALES:
+                  translated, outdated = translation_handle(obj, locale)
+                  if translated:
+                      indexes[locale][kind][translated] = {
+                          'resource': obj,
+                          'translation_outdated': outdated,
+                          'translated_handle': translated,
+                      }
+
+          def normalize_handle(value):
+              return unquote(value.strip('/')).lower()
+
+          def parse_target(target):
+              path = urlsplit(target).path or '/'
+              locale_match = LOCALE_RE.match(path)
+              locale = locale_match.group(1).lower() if locale_match else ''
+              if locale_match:
+                  path = path[locale_match.end():] or '/'
+              parts = [part for part in path.split('/') if part]
+              if path == '/sitemap.xml':
+                  return locale, 'Builtin', 'sitemap.xml'
+              if len(parts) == 2 and parts[0] == 'products':
+                  return locale, 'Product', normalize_handle(parts[1])
+              if len(parts) == 2 and parts[0] == 'collections':
+                  return locale, 'Collection', normalize_handle(parts[1])
+              if len(parts) == 2 and parts[0] == 'pages':
+                  return locale, 'Page', normalize_handle(parts[1])
+              if len(parts) == 3 and parts[0] == 'blogs':
+                  return locale, 'Article', normalize_handle(parts[2])
+              return locale, 'Unknown', normalize_handle(path)
+
+          def resource_state(kind, obj):
+              if kind == 'Product':
+                  return obj.get('status') or ''
+              if kind in {'Page', 'Article'}:
+                  return 'PUBLISHED' if obj.get('isPublished') else 'UNPUBLISHED'
+              return 'EXISTS'
+
+          rows = list(csv.DictReader(INPUT.open(encoding='utf-8'), delimiter='\t'))
+          results = []
+          for row in rows:
+              locale, kind, handle = parse_target(row.get('target', ''))
+              result = {
+                  **row,
+                  'locale': locale,
+                  'resource_type': kind,
+                  'target_handle': handle,
+                  'resolution': 'UNRESOLVED',
+                  'resource_id': '',
+                  'base_handle': '',
+                  'resource_state': '',
+                  'translation_outdated': '',
+              }
+
+              if kind == 'Builtin' and handle == 'sitemap.xml':
+                  result['resolution'] = 'VALID_BUILTIN_ROUTE'
+                  result['resource_state'] = 'LIVE'
+                  results.append(result)
+                  continue
+
+              found = None
+              translated = False
+              outdated = False
+              if locale and kind in indexes[locale]:
+                  translated_row = indexes[locale][kind].get(handle)
+                  if translated_row:
+                      found = translated_row['resource']
+                      translated = True
+                      outdated = translated_row['translation_outdated']
+              if not found and kind in base_indexes:
+                  found = base_indexes[kind].get(handle)
+
+              if found:
+                  state = resource_state(kind, found)
+                  result['resource_id'] = found.get('id', '')
+                  result['base_handle'] = found.get('handle', '')
+                  result['resource_state'] = state
+                  result['translation_outdated'] = outdated if translated else ''
+                  if kind == 'Product':
+                      if state == 'ACTIVE':
+                          result['resolution'] = 'VALID_TRANSLATED_ACTIVE_PRODUCT' if translated else 'VALID_ACTIVE_PRODUCT'
+                      elif state == 'UNLISTED':
+                          result['resolution'] = 'REACHABLE_UNLISTED_PRODUCT'
+                      else:
+                          result['resolution'] = 'NON_LIVE_PRODUCT'
+                  elif kind in {'Page', 'Article'}:
+                      if state == 'PUBLISHED':
+                          result['resolution'] = 'VALID_TRANSLATED_PUBLISHED_' + kind.upper() if translated else 'VALID_PUBLISHED_' + kind.upper()
+                      else:
+                          result['resolution'] = 'UNPUBLISHED_' + kind.upper()
+                  else:
+                      result['resolution'] = 'VALID_TRANSLATED_COLLECTION' if translated else 'VALID_COLLECTION'
+
+              results.append(result)
+
+          counts = Counter(item['resolution'] for item in results)
+          valid_prefixes = ('VALID_', 'REACHABLE_')
+          summary = {
+              'translation_export_objects': len(objects),
+              'checked_unknown_rows': len(results),
+              'resolved_or_valid': sum(value for key, value in counts.items() if key.startswith(valid_prefixes)),
+              'truly_unresolved': counts.get('UNRESOLVED', 0),
+              'non_live_resources': sum(value for key, value in counts.items() if key.startswith(('NON_LIVE_', 'UNPUBLISHED_'))),
+              'resolution_counts': dict(counts),
+          }
+
+          report = {'generated_at': DATE, 'summary': summary, 'results': results}
+          json_path = OUT / f'technical-redirect-translation-resolution-{DATE}.json'
+          tsv_path = OUT / f'technical-redirect-translation-resolution-{DATE}.tsv'
+          md_path = OUT / f'technical-redirect-translation-resolution-{DATE}.md'
+          json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
+
+          fields = [
+              'resolution', 'problem', 'id', 'path', 'target', 'locale', 'resource_type',
+              'target_handle', 'resource_id', 'base_handle', 'resource_state', 'translation_outdated',
+          ]
+          with tsv_path.open('w', encoding='utf-8', newline='') as fh:
+              writer = csv.DictWriter(fh, fieldnames=fields, delimiter='\t', extrasaction='ignore')
+              writer.writeheader()
+              writer.writerows(results)
+
+          lines = [
+              f'# Redirect translation resolution — {DATE}', '',
+              '| Resolution | Count |', '|---|---:|',
+          ]
+          for key, value in sorted(counts.items(), key=lambda x: (-x[1], x[0])):
+              lines.append(f'| `{key}` | {value} |')
+          lines.extend(['', '## Rows requiring action', '',
+                        '| Resolution | Source | Target | Base handle | State |',
+                        '|---|---|---|---|---|'])
+          for item in results:
+              if not item['resolution'].startswith(valid_prefixes):
+                  lines.append(
+                      f"| `{item['resolution']}` | `{item['path']}` | `{item['target']}` | "
+                      f"`{item['base_handle']}` | `{item['resource_state']}` |"
+                  )
+          md_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          print(json.dumps(summary, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit translation resolution
+        run: |
+          git config user.name "Decords Audit Bot"
+          git config user.email "audit-bot@decords.com"
+          git add audits/technical-redirect-translation-resolution-2026-09-05.json \
+                  audits/technical-redirect-translation-resolution-2026-09-05.tsv \
+                  audits/technical-redirect-translation-resolution-2026-09-05.md
+          git commit -m "Resolve localized redirect targets from Shopify translations" || exit 0
+          git push
