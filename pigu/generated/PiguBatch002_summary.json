@@ -1,0 +1,26 @@
+{
+  "source_product_roots": 1171,
+  "target_new_products": 500,
+  "selected_new_products": 500,
+  "selected_products_with_complete_translations": 0,
+  "selected_products_with_translation_fallbacks": 500,
+  "new_offers": 8880,
+  "existing_products_preserved": 11,
+  "existing_offers_preserved": 22,
+  "master_products": 511,
+  "master_offers": 8902,
+  "stock": 999,
+  "collection_hours": 120,
+  "excluded_records": 671,
+  "parent_multi_variant_size_rule": "no size in parent title",
+  "modification_size_rule": "exact rounded centimetres",
+  "generated_files": [
+    "PiguProducts-batch-002-new-only.xml",
+    "PiguProducts-master.xml",
+    "PiguPrices-master.xml",
+    "PiguPrices-master.xlsx",
+    "PiguPrices-batch-002-new-only.xlsx",
+    "PiguBatch002_report.csv",
+    "PiguBatch002_registry.xlsx"
+  ]
+}
