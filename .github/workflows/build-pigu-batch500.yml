@@ -46,33 +46,40 @@ jobs:
           source = zlib.decompress(base64.b64decode(encoded)).decode('utf-8')
 
           media_pattern = re.compile(r'^    image_urls = \[\n.*?^    \]\n    if not image_urls:', flags=re.MULTILINE | re.DOTALL)
-          media_replacement = '''    image_urls = [
-              str(image.get("url") or "")
-              for img in product.get("_images", [])
-              if isinstance(img, dict)
-              for image in [img.get("image")]
-              if isinstance(image, dict) and image.get("url")
-          ]
-              if not image_urls:'''
+          media_replacement = '\n'.join([
+              '    image_urls = [',
+              '        str(image.get("url") or "")',
+              '        for img in product.get("_images", [])',
+              '        if isinstance(img, dict)',
+              '        for image in [img.get("image")]',
+              '        if isinstance(image, dict) and image.get("url")',
+              '    ]',
+              '    if not image_urls:',
+          ])
           source, media_count = media_pattern.subn(media_replacement, source, count=1)
           if media_count != 1:
               raise RuntimeError(f'Expected one media block replacement, got {media_count}')
 
-          duplicate_needle = '''        record_skus = {v.sku for v in record.variants}
-              record_eans = {v.ean for v in record.variants}
-              if record_skus & seen_skus:'''
-          duplicate_replacement = '''        record_skus = {v.sku for v in record.variants}
-              record_eans = {v.ean for v in record.variants}
-              if len(record_skus) != len(record.variants):
-                  excluded.append({"product_id": record.product_id, "handle": record.handle, "title": record.title, "variants": str(len(record.variants)), "reason": "duplicate SKU within product"})
-                  continue
-              if len(record_eans) != len(record.variants):
-                  excluded.append({"product_id": record.product_id, "handle": record.handle, "title": record.title, "variants": str(len(record.variants)), "reason": "duplicate EAN within product"})
-                  continue
-              if record_skus & seen_skus:'''
-          if duplicate_needle not in source:
-              raise RuntimeError('Identifier duplicate-check insertion point was not found')
-          source = source.replace(duplicate_needle, duplicate_replacement, 1)
+          duplicate_pattern = re.compile(
+              r'^        record_skus = \{v\.sku for v in record\.variants\}\n'
+              r'        record_eans = \{v\.ean for v in record\.variants\}\n'
+              r'        if record_skus & seen_skus:',
+              flags=re.MULTILINE,
+          )
+          duplicate_replacement = '\n'.join([
+              '        record_skus = {v.sku for v in record.variants}',
+              '        record_eans = {v.ean for v in record.variants}',
+              '        if len(record_skus) != len(record.variants):',
+              '            excluded.append({"product_id": record.product_id, "handle": record.handle, "title": record.title, "variants": str(len(record.variants)), "reason": "duplicate SKU within product"})',
+              '            continue',
+              '        if len(record_eans) != len(record.variants):',
+              '            excluded.append({"product_id": record.product_id, "handle": record.handle, "title": record.title, "variants": str(len(record.variants)), "reason": "duplicate EAN within product"})',
+              '            continue',
+              '        if record_skus & seen_skus:',
+          ])
+          source, duplicate_count = duplicate_pattern.subn(duplicate_replacement, source, count=1)
+          if duplicate_count != 1:
+              raise RuntimeError(f'Expected one identifier block replacement, got {duplicate_count}')
 
           compile(source, '/tmp/build_pigu_batch500.py', 'exec')
           Path('/tmp/build_pigu_batch500.py').write_text(source, encoding='utf-8')
