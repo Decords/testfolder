@@ -5,7 +5,6 @@ on:
   push:
     paths:
       - "pigu/bulk_url.txt"
-      - "pigu/build_pigu_batch500.py"
       - "pigu/PiguProducts-batch-001.xml"
       - "pigu/PiguPrices-batch-001.xml"
       - ".github/workflows/build-pigu-batch500.yml"
@@ -30,9 +29,41 @@ jobs:
       - name: Install dependencies
         run: python -m pip install --upgrade requests lxml openpyxl
 
+      - name: Recover and patch verified generator
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/Decords/testfolder/8cb13d2a1503d3b97ff6669bc612318c60772f5f/pigu/build_pigu_batch500.py" -o /tmp/build_pigu_batch500_packed.py
+          python - <<'PY'
+          import ast
+          import base64
+          import re
+          import zlib
+          from pathlib import Path
+
+          wrapper = Path('/tmp/build_pigu_batch500_packed.py').read_text(encoding='utf-8')
+          module = ast.parse(wrapper)
+          strings = [node.value for node in ast.walk(module) if isinstance(node, ast.Constant) and isinstance(node.value, str)]
+          encoded = max(strings, key=len)
+          source = zlib.decompress(base64.b64decode(encoded)).decode('utf-8')
+          pattern = re.compile(r'^    image_urls = \[\n.*?^    \]\n    if not image_urls:', flags=re.MULTILINE | re.DOTALL)
+          replacement = '''    image_urls = [
+              str(image.get("url") or "")
+              for img in product.get("_images", [])
+              if isinstance(img, dict)
+              for image in [img.get("image")]
+              if isinstance(image, dict) and image.get("url")
+          ]
+              if not image_urls:'''
+          patched, count = pattern.subn(replacement, source, count=1)
+          if count != 1:
+              raise RuntimeError(f'Expected one media block replacement, got {count}')
+          compile(patched, '/tmp/build_pigu_batch500.py', 'exec')
+          Path('/tmp/build_pigu_batch500.py').write_text(patched, encoding='utf-8')
+          print('Recovered and patched generator:', len(patched), 'characters')
+          PY
+
       - name: Build cumulative product and price feeds
         run: |
-          python pigu/build_pigu_batch500.py \
+          python /tmp/build_pigu_batch500.py \
             --bulk-url-file pigu/bulk_url.txt \
             --existing-products pigu/PiguProducts-batch-001.xml \
             --existing-prices pigu/PiguPrices-batch-001.xml \
