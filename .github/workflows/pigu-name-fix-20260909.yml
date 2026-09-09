@@ -1,0 +1,83 @@
+name: PHH parent title correction 20260909
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/pigu-name-fix-20260909.yml']
+permissions:
+  contents: write
+concurrency:
+  group: pigu-name-fix-20260909
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove size ranges from parent names only
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, re
+          import xml.etree.ElementTree as ET
+          src = Path('pigu/PiguProducts-batch-001.xml')
+          dst = Path('pigu/PiguProducts-batch-001-names-fixed-20260909.xml')
+          raw = src.read_text(encoding='utf-8')
+          old = ET.fromstring(raw)
+          assert len(old.findall('product')) == 11
+          assert len(old.findall('.//modification')) == 22
+          count = 0
+          range_re = re.compile(r',\s*\d+\s*×\s*\d+\s*[–-]\s*\d+\s*×\s*\d+\s*(?:cm|см)\s*$')
+          parent_tags = ('title','title-ru','title-lv','title-ee','title-fi')
+          def patch_product(match):
+              global count
+              block = match.group(0)
+              p = ET.fromstring(block)
+              if len(p.findall('.//modification')) <= 1:
+                  return block
+              for tag in parent_tags:
+                  title = p.findtext(tag)
+                  fixed, n = range_re.subn('', title)
+                  assert n == 1, (tag, title)
+                  pattern = re.compile(r'(<'+re.escape(tag)+r'><!\[CDATA\[)(.*?)(\]\]></'+re.escape(tag)+r'>)', re.S)
+                  block, replacements = pattern.subn(lambda m: m.group(1)+fixed+m.group(3), block)
+                  assert replacements == 1
+                  count += 1
+              return block
+          result = re.sub(r'<product>.*?</product>', patch_product, raw, flags=re.S)
+          assert count == 15
+          new = ET.fromstring(result)
+          assert len(new.findall('product')) == 11
+          mods = new.findall('.//modification')
+          assert len(mods) == 22
+          for old_p, new_p in zip(old.findall('product'),new.findall('product')):
+              for tag in parent_tags:
+                  new_p.find(tag).text = old_p.findtext(tag)
+              assert ET.tostring(new_p) == ET.tostring(old_p)
+          root = ET.fromstring(result)
+          expected = {'7341147056448':'61 × 18','7341147056455':'99 × 30','7341147056462':'140 × 43','7341147056479':'180 × 56','7341147056486':'221 × 69','7341147056493':'259 × 79'}
+          words = [p for p in root.findall('product') if p.findtext('.//barcode') == '7341147056448']
+          assert len(words) == 1 and len(words[0].findall('.//modification')) == 6
+          for mod in words[0].findall('.//modification'):
+              ean = mod.findtext('attributes/barcodes/barcode')
+              for suffix in ('','-ru','-lv','-ee','-fi'):
+                  assert mod.findtext('modification-title'+suffix) == expected[ean]+(' см' if suffix=='-ru' else ' cm')
+          assert len({m.findtext('attributes/barcodes/barcode') for m in mods}) == 22
+          assert len({m.findtext('attributes/supplier-code') for m in mods}) == 22
+          assert hashlib.sha256(result.encode('utf-8')).hexdigest() == 'bcc66c03115f4e4e986cb6f622e6269e421a2adff69d33dada03d6c1dde0fde8'
+          dst.write_text(result, encoding='utf-8')
+          print('Verified: 11 products, 22 modifications, 15 parent titles corrected; other data unchanged.')
+          print('SHA256:',hashlib.sha256(dst.read_bytes()).hexdigest())
+          PY
+      - name: Save corrected XML alongside the source
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pigu/PiguProducts-batch-001-names-fixed-20260909.xml
+          if ! git diff --cached --quiet; then
+            git commit -m 'Correct PHH parent names without changing SKU, EAN or modification sizes'
+            git push origin HEAD:main
+          fi
