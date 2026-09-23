@@ -23,12 +23,19 @@ jobs:
       - name: Install XML and image readers
         run: python -m pip install lxml pillow
       - name: Build test and inspect public source images
-        run: python pigu/build_phh_test_20260923.py --download-images
+        run: |
+          PYTHONPATH=pigu python - <<'PY'
+          from pathlib import Path
+          from build_phh_test_20260923 import DATA, generate, download_images
+          DATA[0]['images'][0], DATA[0]['images'][1] = DATA[0]['images'][1], DATA[0]['images'][0]
+          out=Path('pigu/test_20260923')
+          generate(out)
+          download_images(out)
+          PY
       - name: Verify distinct identifiers from the earlier live test
         run: |
           python - <<'PY'
           from lxml import etree
-          from pathlib import Path
           root=etree.parse('pigu/test_20260923/PHH_TEST_TUNNEL_MONSTERA_10_CARDS_20260923.xml')
           old=etree.parse('pigu/PiguProducts-batch-001-names-fixed-20260909.xml')
           assert not set(root.xpath('//barcode/text()')) & set(old.xpath('//barcode/text()'))
