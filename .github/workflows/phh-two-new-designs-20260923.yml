@@ -1,0 +1,51 @@
+name: PHH two new designs test 20260923
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'pigu/build_phh_test_20260923.py'
+      - '.github/workflows/phh-two-new-designs-20260923.yml'
+permissions:
+  contents: write
+concurrency:
+  group: phh-test-20260923
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install XML and image readers
+        run: python -m pip install lxml pillow
+      - name: Build test and inspect public source images
+        run: python pigu/build_phh_test_20260923.py --download-images
+      - name: Verify distinct identifiers from the earlier live test
+        run: |
+          python - <<'PY'
+          from lxml import etree
+          from pathlib import Path
+          root=etree.parse('pigu/test_20260923/PHH_TEST_TUNNEL_MONSTERA_10_CARDS_20260923.xml')
+          old=etree.parse('pigu/PiguProducts-batch-001-names-fixed-20260909.xml')
+          assert not set(root.xpath('//barcode/text()')) & set(old.xpath('//barcode/text()'))
+          assert not set(root.xpath('//supplier-code/text()')) & set(old.xpath('//supplier-code/text()'))
+          print('No EAN or supplier-code overlap with the earlier 22-offer test.')
+          PY
+      - name: Commit generated test files only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pigu/test_20260923/*.xml pigu/test_20260923/*.csv pigu/test_20260923/*.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish separate-card PHH test with clearly marked packaging estimates'
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phh-test-20260923
+          path: pigu/test_20260923
+          retention-days: 14
