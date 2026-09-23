@@ -2,20 +2,6 @@
   {
     "design": "tunnel",
     "position": 1,
-    "url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/il_fullxfull.7629039803_x8tm_e8245e13-4315-4b81-abf4-a470e3f59c73.jpg?v=1768471963",
-    "status": 200,
-    "final_url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/il_fullxfull.7629039803_x8tm_e8245e13-4315-4b81-abf4-a470e3f59c73.jpg?v=1768471963",
-    "content_type": "image/jpeg",
-    "width": 1024,
-    "height": 1024,
-    "format": "JPEG",
-    "bytes": 140235,
-    "minimum_resolution_met": true,
-    "direct_url": true
-  },
-  {
-    "design": "tunnel",
-    "position": 2,
     "url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/il_fullxfull.7629267857_iloq.jpg?v=1768471964",
     "status": 200,
     "final_url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/il_fullxfull.7629267857_iloq.jpg?v=1768471964",
@@ -24,6 +10,20 @@
     "height": 2500,
     "format": "JPEG",
     "bytes": 597337,
+    "minimum_resolution_met": true,
+    "direct_url": true
+  },
+  {
+    "design": "tunnel",
+    "position": 2,
+    "url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/il_fullxfull.7629039803_x8tm_e8245e13-4315-4b81-abf4-a470e3f59c73.jpg?v=1768471963",
+    "status": 200,
+    "final_url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/il_fullxfull.7629039803_x8tm_e8245e13-4315-4b81-abf4-a470e3f59c73.jpg?v=1768471963",
+    "content_type": "image/jpeg",
+    "width": 1024,
+    "height": 1024,
+    "format": "JPEG",
+    "bytes": 140235,
     "minimum_resolution_met": true,
     "direct_url": true
   },
