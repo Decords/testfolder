@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+  <product>
+    <id>7347684147450</id>
+    <categories>
+      <category>Vehicle Safety Decals</category>
+    </categories>
+    <title>Glowing Baby on Board Car Decal - Luminescent Safety Sticker for Vehicles</title>
+    <description><![CDATA[
+      <p>A glow-in-the-dark Baby on Board vinyl decal for vehicle windows and other clean, smooth vehicle surfaces.</p>
+      <p>Production normally takes 1–3 business days.</p>
+    ]]></description>
+    <price>16.95</price>
+    <delivery_text>6-10 d.d.</delivery_text>
+    <images>
+      <image>https://cdn.shopify.com/s/files/1/0608/0888/8570/products/luminescent-baby-on-board-car-sticker-433611.jpg?v=1757176708</image>
+      <image>https://cdn.shopify.com/s/files/1/0608/0888/8570/products/luminescent-baby-on-board-car-sticker-598155.jpg?v=1757176708</image>
+    </images>
+    <barcode_format>EAN</barcode_format>
+    <model>7347684147450</model>
+    <manufacturer>Decords</manufacturer>
+    <url>https://www.decords.com/products/glow-in-dark-baby-on-board-funny-car-vinyl-sticker-night-glowing-child-kid-inside-safety-window-decal-realistic-luminescent-light-ghost</url>
+    <variants>
+      <variant group_title="Size">
+        <title>5 x 8</title>
+        <quantity>99</quantity>
+        <barcode></barcode>
+        <price>0.00</price>
+      </variant>
+      <variant group_title="Size">
+        <title>10 x 16</title>
+        <quantity>99</quantity>
+        <barcode></barcode>
+        <price>7.00</price>
+      </variant>
+      <variant group_title="Size">
+        <title>15 x 24</title>
+        <quantity>99</quantity>
+        <barcode></barcode>
+        <price>13.00</price>
+      </variant>
+      <variant group_title="Size">
+        <title>19 x 31</title>
+        <quantity>99</quantity>
+        <barcode></barcode>
+        <price>26.00</price>
+      </variant>
+      <variant group_title="Size">
+        <title>24 x 39</title>
+        <quantity>99</quantity>
+        <barcode></barcode>
+        <price>34.00</price>
+      </variant>
+      <variant group_title="Size">
+        <title>29 x 47</title>
+        <quantity>99</quantity>
+        <barcode></barcode>
+        <price>43.00</price>
+      </variant>
+      <variant group_title="Size">
+        <title>34 x 55</title>
+        <quantity>99</quantity>
+        <barcode></barcode>
+        <price>83.00</price>
+      </variant>
+    </variants>
+  </product>
+</products>
