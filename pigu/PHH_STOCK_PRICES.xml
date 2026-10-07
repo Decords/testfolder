@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<products>
+  <product>
+    <sku><![CDATA[PHH-52437119926610]]></sku>
+    <ean><![CDATA[7341146853048]]></ean>
+    <price_lt>36</price_lt>
+    <price_lv>36</price_lv>
+    <price_ee>36</price_ee>
+    <price_fi>36</price_fi>
+    <stock>999</stock>
+    <collection_hours_lt>120</collection_hours_lt>
+    <collection_hours_lv>120</collection_hours_lv>
+    <collection_hours_ee>120</collection_hours_ee>
+    <collection_hours_fi>120</collection_hours_fi>
+  </product>
+</products>
