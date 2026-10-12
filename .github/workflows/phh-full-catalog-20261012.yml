@@ -25,14 +25,19 @@ jobs:
       - name: Inspect legacy generator without executing it
         run: |
           python - <<'PY'
-          import ast,base64,zlib
+          import ast,base64,zlib,requests
           from pathlib import Path
           out=Path('pigu/full_20261012');out.mkdir(exist_ok=True)
-          tree=ast.parse(Path('pigu/build_pigu_batch500.py').read_text())
-          strings=[n.value for n in ast.walk(tree) if isinstance(n,ast.Constant) and isinstance(n.value,str)]
-          src=zlib.decompress(base64.b64decode(max(strings,key=len))).decode()
-          (out/'legacy_generator_reference.py').write_text(src)
-          print('Decoded legacy reference:',len(src),'characters; not executed')
+          try:
+              r=requests.get('https://raw.githubusercontent.com/Decords/testfolder/8cb13d2a1503d3b97ff6669bc612318c60772f5f/pigu/build_pigu_batch500.py',timeout=60);r.raise_for_status()
+              tree=ast.parse(r.text)
+              strings=[n.value for n in ast.walk(tree) if isinstance(n,ast.Constant) and isinstance(n.value,str)]
+              src=zlib.decompress(base64.b64decode(max(strings,key=len))).decode()
+              (out/'legacy_generator_reference.py').write_text(src)
+              print('Decoded legacy reference:',len(src),'characters; not executed')
+          except Exception as e:
+              (out/'legacy_reference_error.txt').write_text(str(e))
+              print('Legacy reference unavailable:',e)
           PY
       - name: Download fresh catalog and audit
         run: |
