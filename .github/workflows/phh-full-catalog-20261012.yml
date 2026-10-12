@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - .github/workflows/phh-full-catalog-20261012.yml
-      - pigu/full_20261012/build_config.json
       - pigu/full_20261012/build_full.py
 permissions:
   contents: write
@@ -21,78 +20,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install requests lxml pillow
-      - name: Inspect legacy generator without executing it
-        run: |
-          python - <<'PY'
-          import ast,base64,zlib,requests
-          from pathlib import Path
-          out=Path('pigu/full_20261012');out.mkdir(exist_ok=True)
-          try:
-              r=requests.get('https://raw.githubusercontent.com/Decords/testfolder/8cb13d2a1503d3b97ff6669bc612318c60772f5f/pigu/build_pigu_batch500.py',timeout=60);r.raise_for_status()
-              tree=ast.parse(r.text)
-              strings=[n.value for n in ast.walk(tree) if isinstance(n,ast.Constant) and isinstance(n.value,str)]
-              src=zlib.decompress(base64.b64decode(max(strings,key=len))).decode()
-              (out/'legacy_generator_reference.py').write_text(src)
-              print('Decoded legacy reference:',len(src),'characters; not executed')
-          except Exception as e:
-              (out/'legacy_reference_error.txt').write_text(str(e))
-              print('Legacy reference unavailable:',e)
-          PY
-      - name: Download fresh catalog and audit
-        run: |
-          python - <<'PY'
-          import json,gzip,collections,hashlib
-          from pathlib import Path
-          import requests
-          out=Path('pigu/full_20261012'); cfgpath=out/'build_config.json'
-          if cfgpath.exists():
-              cfg=json.loads(cfgpath.read_text()); source=out/'shopify_source.jsonl.gz'
-              if not source.exists() or cfg.get('force_download',False):
-                  r=requests.get(cfg['bulk_url'],timeout=300);r.raise_for_status()
-                  with gzip.open(source,'wb') as f:f.write(r.content)
-              products={};pending=[]
-              with gzip.open(source,'rt') as f:
-                  for line in f:
-                      n=json.loads(line)
-                      if n['id'].startswith('gid://shopify/Product/'):
-                          n['_variants']=[];n['_images']=[];products[n['id']]=n
-                      else: pending.append(n)
-              for n in pending:
-                  p=products.get(n.get('__parentId'))
-                  if p is None:continue
-                  if n['id'].startswith('gid://shopify/ProductVariant/'):p['_variants'].append(n)
-                  elif n.get('image'):p['_images'].append(n)
-              types=collections.Counter(p.get('productType','') for p in products.values())
-              cats=collections.Counter((p.get('category') or {}).get('fullName','') for p in products.values())
-              variants=[v for p in products.values() for v in p['_variants']]
-              barcodes=collections.Counter(v.get('barcode') for v in variants if v.get('barcode'))
-              samples=[];seen=set()
-              for p in products.values():
-                  key=p.get('productType','')
-                  if key not in seen:
-                      seen.add(key);samples.append({'id':p['id'],'title':p['title'],'type':key,'category':p.get('category'),'description':p.get('descriptionHtml','')[:1600],'options':p.get('options'),'variants':p['_variants'][:6],'images':p['_images'][:2]})
-              audit={'products':len(products),'variants':len(variants),'expected_products':cfg.get('expected_products'),'types':dict(types),'categories':dict(cats),'variants_missing_ean':sum(not v.get('barcode') for v in variants),'ean_duplicates':{k:v for k,v in barcodes.items() if v>1},'translations':{lang:sum(bool(p.get(lang)) for p in products.values()) for lang in ['lt','lv','ru','et','fi']},'currency_counts':{lang:dict(collections.Counter((v.get(lang) or {}).get('price',{}).get('currencyCode') for v in variants)) for lang in ['lt','lv','ee','fi']},'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest()}
-              if cfg.get('expected_products') is not None:assert len(products)==cfg['expected_products'],audit
-              (out/'source_audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2))
-              (out/'source_samples.json').write_text(json.dumps(samples,ensure_ascii=False,indent=2))
-              print(json.dumps(audit,ensure_ascii=False))
-          else:print('No fresh export config yet; legacy reference only')
-          PY
-      - name: Build verified feeds when generator is present
+      - run: pip install requests lxml
+      - name: Build and validate complete feed
+        id: build
         run: |
           if test -f pigu/full_20261012/build_full.py; then python pigu/full_20261012/build_full.py; fi
-      - name: Commit generated source audit and feeds
+      - name: Preserve cache, reports and successfully validated outputs
+        if: always()
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add pigu/full_20261012
           if ! git diff --cached --quiet; then
-            git commit -m 'Update PHH full catalog preparation results'
+            git commit -m 'Update PHH full catalog build results and translation cache'
             git pull --rebase origin main
             git push origin HEAD:main
           fi
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: phh-full-catalog-20261012
           path: pigu/full_20261012/
