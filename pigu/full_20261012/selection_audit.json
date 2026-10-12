@@ -1,0 +1,22 @@
+{
+  "source_products": 2739,
+  "source_variants": 53975,
+  "selected_products": 2436,
+  "selected_variants": 11895,
+  "excluded_products": 303,
+  "excluded_reasons": {
+    "missing_required_dimensions": 105,
+    "no_eligible_image": 7,
+    "service_or_shipping_upgrade": 4,
+    "missing_ean": 187
+  },
+  "variant_rejections": {
+    "required_decal_dimensions_not_found": 407,
+    "missing_or_invalid_ean": 6931,
+    "duplicate_ean_within_source_product": 2250,
+    "non_physical_variant": 1
+  },
+  "max_variants_per_product": 5,
+  "stock": 999,
+  "collection_hours": 120
+}
