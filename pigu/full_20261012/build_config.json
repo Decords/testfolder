@@ -1,0 +1,14 @@
+{
+  "bulk_operation_id": "gid://shopify/BulkOperation/10817995407698",
+  "bulk_url": "https://storage.googleapis.com/shopify-tiers-assets-prod-us-east1/bulk-operation-outputs/87c6d1e39e56c317aa2749330ebd?GoogleAccessId=assets-us-prod%40shopify-tiers.iam.gserviceaccount.com&Expires=1792403313&Signature=aEFrJ7Jg1%2Fvnwn6lCzOgRwTw9U5PwK5m3i9MsMplrRAFXj3tmtaEm4uG3GmHg36MTYjtJWg0fk7jtqyBQC9F31gFQIWpSD2LfLqH8it2uvLeJOaXZVv8rJMDLKUlgmiaXW0djXlwVXAkXITsLdOC%2F341ousL2o3Q8DT9wyniypUI%2BwHZNu2I5h%2F6colg%2BSjGoTbjNQwFnjX5a02GK%2F5Hyb4idxXH%2BVkEQM%2Fj0fzXMT0AQKpJWFeRKeq29u0AU43PcpWQ9AHmEP7Nzjlq9qk3Sslrm9XEyOIQ8%2FSEL6Uvr4h43PA6iaDWe4CWBPp8bIsM3KGhyNNyvJ8FsWgeuN2RuA%3D%3D&response-content-disposition=attachment%3B+filename%3D%22staging-bulk-10817995407698.jsonl%22%3B+filename%2A%3DUTF-8%27%27staging-bulk-10817995407698.jsonl&response-content-type=application%2Fjsonl",
+  "expected_products": 2739,
+  "max_variants_per_product": 5,
+  "preferred_sticker_sizes_cm": [60,100,140,180,220],
+  "stock": 999,
+  "collection_hours": 120,
+  "countries": ["lt","lv","ee","fi"],
+  "price_source": "Shopify contextual EUR prices for each country",
+  "existing_content_file_id": "gid://shopify/GenericFile/60892789211474",
+  "content_url": "https://cdn.shopify.com/s/files/1/0608/0888/8570/files/PHH_TEST_TUNNEL_MONSTERA_10_CARDS_20260923.xml",
+  "stock_price_path": "pigu/PHH_STOCK_PRICES.xml"
+}
