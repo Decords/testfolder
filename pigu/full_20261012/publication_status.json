@@ -1,0 +1,10 @@
+{
+  "status": "preparing_not_published",
+  "source_active_products": 2739,
+  "source_variants": 53975,
+  "max_selected_variants_per_product": 5,
+  "stock": 999,
+  "collection_hours": 120,
+  "production_content_url_changed": false,
+  "production_price_url_changed": false
+}
