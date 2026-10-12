@@ -1,0 +1,42 @@
+name: PHH translation probe
+on:
+  push:
+    paths: [.github/workflows/phh-translation-probe-20261012.yml]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests lxml
+      - run: |
+          python - <<'PY'
+          import sys,time,json
+          from pathlib import Path
+          sys.path.insert(0,'pigu/full_20261012')
+          from phh_translate import translate_batch
+          from phh_source import load_products
+          from phh_common import clean_title,intro
+          items=[]
+          for p in list(load_products().values())[:6]:
+              for s in [clean_title(p['title']),intro(p['descriptionHtml'])]:items.append((str(len(items)),{'text':s}))
+          start=time.time()
+          try:
+              result=translate_batch('lt',items)
+              report={'success':True,'seconds':time.time()-start,'segments':len(result),'sample':list(result.values())[:4]}
+          except Exception as e:report={'success':False,'seconds':time.time()-start,'error':str(e)}
+          Path('pigu/full_20261012/translation_probe.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          print(json.dumps(report,ensure_ascii=False))
+          PY
+      - run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pigu/full_20261012/translation_probe.json
+          git commit -m 'Record translation integrity probe'
+          git pull --rebase origin main
+          git push origin HEAD:main
