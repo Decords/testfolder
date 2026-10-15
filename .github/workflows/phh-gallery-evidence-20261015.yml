@@ -1,0 +1,26 @@
+name: PHH gallery and dimension evidence 20261015
+on:
+  push:
+    branches: [main]
+    paths:
+      - pigu/staging_20261015/public_source_url.txt
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests pillow
+      - run: python pigu/staging_20261015/collect_gallery.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phh-gallery-evidence-20261015
+          path: phh_gallery_evidence/
+          retention-days: 7
+          if-no-files-found: error
