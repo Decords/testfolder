@@ -1,0 +1,53 @@
+name: PHH compact gallery evidence 20261015
+on:
+  push:
+    paths: [.github/workflows/phh-gallery-compact-20261015.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: phh-gallery-evidence-20261015
+          run-id: 38734082833
+          github-token: ${{ github.token }}
+          path: evidence
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phh-gallery-compact-20261015
+          path: |
+            evidence/current_public_source.jsonl.gz
+            evidence/preview_checks.json
+            evidence/summary.json
+            evidence/contact_sheets/
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phh-gallery-originals-selected-20261015
+          path: |
+            evidence/previews/7718006882554_*.jpg
+            evidence/previews/7718009635066_*.jpg
+            evidence/previews/7718010159354_*.jpg
+            evidence/previews/7718011666682_*.jpg
+            evidence/previews/7718020841722_*.jpg
+            evidence/previews/8568370889042_*.jpg
+            evidence/previews/8568455692626_*.jpg
+            evidence/previews/8755593019730_*.jpg
+            evidence/previews/9745189142866_*.jpg
+            evidence/previews/9758674485586_*.jpg
+            evidence/previews/9780018184530_*.jpg
+            evidence/previews/9869889700178_*.jpg
+            evidence/previews/9870956822866_*.jpg
+            evidence/previews/9870989132114_*.jpg
+            evidence/previews/9887082479954_*.jpg
+            evidence/previews/9887332663634_*.jpg
+            evidence/previews/9891216884050_*.jpg
+            evidence/previews/9894724469074_*.jpg
+            evidence/previews/9894746390866_*.jpg
+            evidence/previews/9909177909586_*.jpg
+            evidence/previews/10542500381010_*.jpg
+          retention-days: 7
