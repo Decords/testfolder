@@ -1,0 +1,26 @@
+name: PHH read-only live XML audit
+on:
+  push:
+    paths:
+      - 'pigu/audit_phh_feed.py'
+      - '.github/workflows/phh-audit-20261102.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out public repository
+        uses: actions/checkout@v4
+      - name: Inspect the two published XML feeds without changing them
+        run: |
+          python3 pigu/audit_phh_feed.py pigu/PHH_PRODUCTS.xml pigu/PHH_STOCK_PRICES.xml --json phh-audit-20261102.json
+      - name: Store diagnostic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phh-readonly-audit-20261102
+          path: phh-audit-20261102.json
+          if-no-files-found: warn
