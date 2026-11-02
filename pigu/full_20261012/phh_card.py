@@ -14,14 +14,19 @@ def card(root,r,c,cache):
  text(node,'manufacturer-address','Madara 33/1 - S1, 10613 Tallinn, Estonia')
  text(node,'manufacturer-email','info@decords.com')
  props=etree.SubElement(node,'properties')
+ prop(props,'Prekės ženklas','Decords')
  if r['category_id']=='1001':
   assert s
   prop(props,'Aukštis',s['b'] or s['a']);prop(props,'Plotis',s['a']);prop(props,'Raštai',pattern(p))
+ elif s and s.get('b'):
+  prop(props,'Aukštis',s['b']);prop(props,'Plotis',s['a'])
  material=(p['title']+' '+plain(p['descriptionHtml'])).lower()
  if re.search(r'\bpla\b',material):prop(props,'Medžiaga','PLA')
  elif re.search(r'\bpetg\b',material):prop(props,'Medžiaga','PETG')
  elif r['family'] in ('decal','film') and re.search(r'vinyl|pvc|vinil',material):prop(props,'Medžiaga','Vinilas')
- elif r['family']=='paper' and 'paper' in material:prop(props,'Medžiaga','Popierius')
+ elif r['family']=='paper' and 'canvas' in (p['productType']+' '+p['title']).lower():prop(props,'Medžiaga','Drobė')
+ elif r['family']=='paper' and ('paper' in material or re.search(r'poster|printed flyer',p['productType'],re.I)):prop(props,'Medžiaga','Popierius')
+ elif r['family']=='decal':prop(props,'Medžiaga','Vinilas')
  if len(props)==0:node.remove(props)
  colour=etree.SubElement(etree.SubElement(node,'colours'),'colour')
  ims=etree.SubElement(colour,'images')
