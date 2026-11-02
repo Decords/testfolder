@@ -1,0 +1,35 @@
+name: PHH future generator metadata smoke test
+on:
+  push:
+    paths:
+      - 'pigu/full_20261012/phh_card.py'
+      - 'pigu/full_20261012/phh_pack.py'
+      - 'pigu/full_20261012/phh_validate.py'
+      - '.github/workflows/phh-generator-smoke-20261102.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install lxml
+      - run: python -m compileall -q pigu/full_20261012
+      - name: Check approved standard package remains stable
+        run: |
+          PYTHONPATH=pigu/full_20261012 python - <<'PY'
+          from phh_pack import package
+          v={'inventoryItem':{'measurement':{'weight':{'value':0.2,'unit':'KILOGRAMS'}}}}
+          for family in ('decal','film','paper'):
+              r={'family':family,'p':{'title':'TEST','productType':'Wall Decals'}}
+              c={'size':{'nominal':120,'a':120,'b':80},'v':v}
+              p=package(r,c)
+              assert (p['length'],p['width'],p['height'],p['weight'])==('0.60','0.06','0.06','0.50')
+              assert 'approved' in p['basis']
+              print(family,p['basis'])
+          PY
