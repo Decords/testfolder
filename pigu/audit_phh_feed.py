@@ -6,6 +6,7 @@ from pathlib import Path
 import argparse, datetime, json, re, xml.etree.ElementTree as ET
 
 LANGS=('', '-ru', '-lv', '-ee', '-fi')
+FI_TARGETS=('6012940535553','6012937279279','6012927578580','7341146629643','7341146630687')
 REQ=('category-id','category-name','manufacturer-name','manufacturer-address','manufacturer-email')
 METER=('weight','length','height','width')
 def text(n,k):return ((n.findtext(k) or '').strip() if n is not None else '')
@@ -32,7 +33,7 @@ def main():
     a=p.parse_args()
     c=Counter(); samples=defaultdict(list)
     eans=Counter();skus=Counter();brands=Counter();category=Counter();packs=Counter()
-    n=0; mods=0
+    n=0; mods=0; fi_products={}; fi_offers={}
     def issue(k,ean):
         c[k]+=1
         if len(samples[k])<8:samples[k].append(ean)
@@ -60,6 +61,7 @@ def main():
             mods+=1
             e=text(m.find('./attributes/barcodes'),'barcode')
             s=text(m.find('./attributes'),'supplier-code')
+            if e in FI_TARGETS:fi_products[e]={'product_title':text(product,'title'),'category_id':cat,'package_m_kg':{k:text(m,k) for k in METER}}
             if e:eans[e]+=1
             else:issue('missing_ean','product-'+str(n))
             if s:skus[s]+=1
@@ -80,6 +82,7 @@ def main():
         pn+=1
         e=text(o,'ean');s=text(o,'sku')
         if e:pe[e]+=1
+        if e in FI_TARGETS:fi_offers[e]={'stock':text(o,'stock'),'price_fi':text(o,'price_fi'),'collection_hours_fi':text(o,'collection_hours_fi')}
         else:issue('offer_missing_ean','offer-'+str(pn))
         if s:ps[s]+=1
         else:issue('offer_missing_sku',e)
@@ -104,6 +107,7 @@ def main():
        'most_common_packaging':[{'length_cm':k[0],'height_cm':k[1],'width_cm':k[2],'weight_kg':k[3],'count':v} for k,v in packs.most_common(25)],
        'unique_packaging_combinations':len(packs),
        'top_categories':[{'id':k[0],'name':k[1],'count':v} for k,v in category.most_common(25)],
+       'historical_suspended_fi_five':[{'ean':e,'in_live_products':e in fi_products,'in_live_stock_prices':e in fi_offers,'product':fi_products.get(e),'offer':fi_offers.get(e)} for e in FI_TARGETS],
        'limitation':'XML cannot prove PHH activation state or whether warehouse dimensions are measured.'
     }
     if a.json:Path(a.json).write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
