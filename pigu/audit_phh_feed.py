@@ -62,8 +62,8 @@ def main():
             for f in ('Aukštis','Plotis','Raštai'):
                 if not props.get(f):issue('missing_wall_attribute_'+f,'product-'+str(n))
             try:
-                a=number(props['Aukštis'][0]);b=number(props['Plotis'][0]);
-                if a is not None and b is not None and min(a,b)>60:large_wall_art+=1
+                art_h=number(props['Aukštis'][0]);art_w=number(props['Plotis'][0]);
+                if art_h is not None and art_w is not None and min(art_h,art_w)>60:large_wall_art+=1
             except (KeyError, IndexError, TypeError):pass
         modifications=product.findall('./colours/colour/modifications/modification')
         if not modifications:issue('missing_modifications','product-'+str(n))
