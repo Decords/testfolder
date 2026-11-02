@@ -6,12 +6,12 @@ def package(r,c):
  units={'KILOGRAMS':Decimal(1),'GRAMS':Decimal('.001'),'POUNDS':Decimal('.45359237'),'OUNCES':Decimal('.028349523125')}
  source=value*units.get(w['unit'],Decimal(1))
  if fam in ('decal','film','paper'):
-  short=min(s['a'],s['b'] or s['a']) if s else 30
-  length=Decimal(min(max(short+5,25),110))/100;width=height=Decimal('.12')
-  area=Decimal(s['a']*(s['b'] or s['a']) if s else 900)/10000
-  estimate=(area*Decimal('.22' if fam=='paper' else '.30')+Decimal('.35')).quantize(Decimal('.1'),rounding=ROUND_CEILING)
-  weight=source+Decimal('.15') if 0<source<=5 else estimate
-  basis='source_weight_plus_estimated_packaging' if 0<source<=5 else 'area_based_packaged_weight_estimate'
+  # Seller-approved standard packaging for rolled printed products.
+  # Length 60 cm, width and height 6 cm, packaged weight 0.5 kg.
+  # Not a measured value for arbitrary 3D printed items.
+  return {'weight':'0.50','length':'0.60','width':'0.06','height':'0.06',
+          'basis':'seller_approved_standard_60x6x6_cm_0_5_kg',
+          'source_weight_kg':str(source),'measured':False}
  else:
   length=width=height=Decimal(max(nom+4,12))/100
   estimate=(Decimal(nom**3)*Decimal('.000031')+Decimal('.20')).quantize(Decimal('.1'),rounding=ROUND_CEILING)
