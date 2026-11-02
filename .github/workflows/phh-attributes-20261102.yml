@@ -1,0 +1,21 @@
+name: PHH attribute completeness diagnostic
+on:
+  push:
+    paths:
+      - 'pigu/diagnose_phh_attributes_20261102.py'
+      - '.github/workflows/phh-attributes-20261102.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit PHH categories and properties
+        run: python3 pigu/diagnose_phh_attributes_20261102.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phh-categories-audit-20261102
+          path: pigu/attribute_diagnostic_20261102.json
