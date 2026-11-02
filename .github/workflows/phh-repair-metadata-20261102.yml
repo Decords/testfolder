@@ -1,0 +1,57 @@
+name: PHH repair missing catalog metadata 20261102
+on:
+  push:
+    paths:
+      - 'pigu/repair_phh_metadata_20261102.py'
+      - '.github/workflows/phh-repair-metadata-20261102.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout catalog
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Install XML validator
+        run: python3 -m pip install lxml --break-system-packages
+      - name: Validate and stage metadata repair
+        run: python3 pigu/repair_phh_metadata_20261102.py --apply
+      - name: Validate updated live content XML against price feed
+        run: python3 pigu/audit_phh_feed.py pigu/PHH_PRODUCTS.xml pigu/PHH_STOCK_PRICES.xml --json phh-audit-after-repair.json > /dev/null
+      - name: Verify changes before publication
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('pigu/PHH_REPAIR_REPORT_20261102.json'))
+          a=json.load(open('phh-audit-after-repair.json'))
+          assert r['action_counts']['brand_added']==11892, r['action_counts']
+          assert a['products']==11892 and not a['issues_count'], a['issues_count']
+          assert a['ean_duplicate_count']==a['supplier_code_duplicate_count']==0
+          assert a['content_eans_absent_in_stock_prices_count']==0
+          assert a['stock_price_eans_absent_in_content_count']==6940
+          assert a['manufacturer_profiles'][0]['name']=='AnOL OÜ'
+          assert a['manufacturer_profiles'][0]['count']==11892
+          assert a['most_common_packaging'][0]['count']==11892
+          print('CHECK PASSED',r['action_counts'])
+          PY
+      - name: Commit and publish repaired PHH XML
+        run: |
+          git config user.name "Decords PHH Catalog"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pigu/PHH_PRODUCTS.xml pigu/PHH_REPAIR_REPORT_20261102.json
+          git commit -m "Fix PHH brand and supported product attributes without changing IDs or packaging"
+          git push origin HEAD:main
+      - name: Preserve audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phh-metadata-fix-validation-20261102
+          path: |
+            pigu/PHH_REPAIR_REPORT_20261102.json
+            phh-audit-after-repair.json
+          if-no-files-found: warn
