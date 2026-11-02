@@ -35,13 +35,17 @@ def main():
     a=p.parse_args()
     c=Counter(); samples=defaultdict(list)
     eans=Counter();skus=Counter();brands=Counter();category=Counter();packs=Counter()
-    n=0; mods=0; fi_products={}; fi_offers={};targeted_products={};targeted_offers={};offer_stocks={}
+    n=0; mods=0; fi_products={}; fi_offers={};targeted_products={};targeted_offers={};offer_stocks={};shopify_ids=set();missing_shopify_id=0;large_wall_art=0
     def issue(k,ean):
         c[k]+=1
         if len(samples[k])<8:samples[k].append(ean)
     for product in read_products(a.content):
         n+=1
         cat=text(product,'category-id')
+        cmt=text(product,'comments')
+        match=re.search(r'Shopify product (\d+)\s*;\s*variant (\d+)',cmt)
+        if match:shopify_ids.add(match.group(1))
+        else:missing_shopify_id+=1
         category[(cat,text(product,'category-name'))]+=1
         for f in REQ:
             if not text(product,f):issue('missing_'+f,'product-'+str(n))
@@ -57,6 +61,10 @@ def main():
                 props[text(x,'id')]=[v.text for v in x.findall('./values/value') if v.text and v.text.strip()]
             for f in ('Aukštis','Plotis','Raštai'):
                 if not props.get(f):issue('missing_wall_attribute_'+f,'product-'+str(n))
+            try:
+                a=number(props['Aukštis'][0]);b=number(props['Plotis'][0]);
+                if a is not None and b is not None and min(a,b)>60:large_wall_art+=1
+            except (KeyError, IndexError, TypeError):pass
         modifications=product.findall('./colours/colour/modifications/modification')
         if not modifications:issue('missing_modifications','product-'+str(n))
         for m in modifications:
@@ -98,6 +106,8 @@ def main():
        'live_stock_prices_bytes':Path(a.offers).stat().st_size,
        'products':n,'modifications':mods,'price_stock_offers':pn,
        'unique_product_eans':len(co),'unique_offer_eans':len(po),
+       'unique_shopify_source_product_ids':len(shopify_ids),'xml_cards_without_shopify_id':missing_shopify_id,
+       'wall_decals_with_both_artwork_sides_over_60cm':large_wall_art,
        'issues_count':dict(c),'issues_examples':dict(samples),
        'manufacturer_profiles':[{'name':k[0],'address':k[1],'email':k[2],'count':v} for k,v in brands.most_common(15)],
        'ean_duplicate_count':sum(v>1 for v in eans.values()),
