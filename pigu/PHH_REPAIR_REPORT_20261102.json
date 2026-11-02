@@ -1,0 +1,277 @@
+{
+  "created_utc": "2026-11-02T14:21:48.643520+00:00",
+  "source_git_blob_sha": "75027284388b4da5c33dc9f11a2056c74c5caf31",
+  "source_content_sha256": "29fe5b11f40df4b3b96bc58cdb6e0c633386dd8bf268f6372e9925e22de9144b",
+  "updated_content_sha256": "9cede63a4f4683671288c9670f730b86c563d778454e78995be7f80237ba6c5c",
+  "published_products": 11892,
+  "action_counts": {
+    "approved_packages_unchanged": 11892,
+    "brand_added": 11892,
+    "artwork_dimension_added": 3440,
+    "products": 11892,
+    "new_properties_blocks": 184,
+    "material_added": 657
+  },
+  "materials_added": {
+    "Vinilas": 642,
+    "Drobė": 15
+  },
+  "remaining_without_supported_material_by_category": {
+    "SH-ae-2-1-2-1-6": 5,
+    "SH-tg-5-2": 8,
+    "SH-hg-3-68-1": 25,
+    "SH-hg-3-68": 15,
+    "SH-hg-3-56": 10,
+    "SH-vp-1-5-4-5": 25,
+    "SH-hg-3-74-4": 75,
+    "SH-os-4-4-1": 10,
+    "SH-el-7-11-2": 4,
+    "SH-bi-24-11": 25,
+    "SH-ae-2-1-2-14-4-4": 15,
+    "SH-ae-2-1-2-8-4": 35,
+    "SH-bi-24-8": 5,
+    "SH-bi-1-1": 5,
+    "SH-hg-11-1-8": 4,
+    "SH-hg-11-8-41-13-2": 4,
+    "SH-hg-11-5-4-2": 4,
+    "SH-tg-5-23-11": 3,
+    "SH-sg-4-14-3-2-2": 5,
+    "SH-aa-3-4": 3,
+    "SH-hg-3-30": 5,
+    "SH-hg-3-4-3": 5,
+    "SH-ae-2-1-4-6-7": 5,
+    "SH-vp-1-5-4-14": 5
+  },
+  "edited_categories": {
+    "SH-vp-1-5-4-5": {
+      "brand": 114,
+      "dimension": 118
+    },
+    "1001": {
+      "brand": 6359,
+      "material": 642
+    },
+    "SH-bi-24-1": {
+      "brand": 10,
+      "dimension": 20
+    },
+    "SH-ae-2-1-2-1-6": {
+      "brand": 5,
+      "dimension": 10
+    },
+    "SH-tg-5-2": {
+      "brand": 8,
+      "dimension": 8
+    },
+    "SH-hg-3-68-1": {
+      "brand": 352,
+      "dimension": 484
+    },
+    "SH-hg-3-68": {
+      "brand": 195,
+      "dimension": 390
+    },
+    "SH-vp-1-5-4-19": {
+      "brand": 15,
+      "dimension": 10
+    },
+    "SH-ae-2-1-2-8-4": {
+      "brand": 267,
+      "dimension": 328
+    },
+    "SH-bi-24-9": {
+      "brand": 20,
+      "dimension": 30
+    },
+    "SH-bi-24-12": {
+      "brand": 20
+    },
+    "SH-hg-3-56": {
+      "brand": 10
+    },
+    "SH-bi-24-8": {
+      "brand": 15
+    },
+    "SH-hg-3-74-4": {
+      "brand": 300,
+      "dimension": 400
+    },
+    "SH-el-7-11-2": {
+      "brand": 24
+    },
+    "SH-os-4-4-1": {
+      "brand": 10
+    },
+    "SH-hg-3-4-2-1": {
+      "brand": 755,
+      "dimension": 1510
+    },
+    "SH-hg-3-4-2": {
+      "brand": 15,
+      "material": 15,
+      "dimension": 30
+    },
+    "SH-hg-3-1": {
+      "brand": 10,
+      "dimension": 10
+    },
+    "SH-sg-4-9-6-3": {
+      "brand": 20,
+      "dimension": 40
+    },
+    "SH-bi-24-11": {
+      "brand": 55,
+      "dimension": 2
+    },
+    "SH-ae-2-1-2-14-4-4": {
+      "brand": 15,
+      "dimension": 30
+    },
+    "SH-vp-1-5-4-1": {
+      "brand": 10,
+      "dimension": 20
+    },
+    "SH-bi-1-1": {
+      "brand": 5
+    },
+    "SH-hg-11-1-8": {
+      "brand": 4
+    },
+    "SH-hg-11-8-41-13-2": {
+      "brand": 4
+    },
+    "SH-hg-11-5-4-2": {
+      "brand": 4
+    },
+    "SH-fr-23-3": {
+      "brand": 10
+    },
+    "SH-tg-5-23-11": {
+      "brand": 3
+    },
+    "SH-sg-4-14-3-2-2": {
+      "brand": 5
+    },
+    "SH-ha-6-24": {
+      "brand": 15
+    },
+    "SH-ae-2-1-5-3-5": {
+      "brand": 5
+    },
+    "SH-aa-3-4": {
+      "brand": 438
+    },
+    "SH-hg-12-1-16-1": {
+      "brand": 199
+    },
+    "SH-hg-3-30": {
+      "brand": 25
+    },
+    "SH-tg-4-9": {
+      "brand": 5
+    },
+    "SH-fr-19-2-2": {
+      "brand": 1295
+    },
+    "SH-hg-3-18": {
+      "brand": 10
+    },
+    "SH-tg-5-8-4": {
+      "brand": 75
+    },
+    "SH-hg-3-4-3": {
+      "brand": 175
+    },
+    "SH-ap-2-14": {
+      "brand": 20
+    },
+    "SH-aa-3-1": {
+      "brand": 130
+    },
+    "SH-hb-2-3-3-2": {
+      "brand": 75
+    },
+    "SH-ae-2-1-4-6-7": {
+      "brand": 25
+    },
+    "SH-vp-1-5-4-14": {
+      "brand": 5
+    },
+    "SH-hg-11-4-6": {
+      "brand": 1
+    },
+    "SH-hg-3-67": {
+      "brand": 60
+    },
+    "SH-os-3-10-4": {
+      "brand": 15
+    },
+    "SH-fr-19-2-1": {
+      "brand": 25
+    },
+    "SH-hg-3-10-2": {
+      "brand": 20
+    },
+    "SH-hg-3-58-7": {
+      "brand": 15
+    },
+    "SH-hg-3-67-3": {
+      "brand": 10
+    },
+    "SH-hg-10-16-5": {
+      "brand": 5
+    },
+    "SH-hg-3-21": {
+      "brand": 10
+    },
+    "SH-rc-1-1": {
+      "brand": 420
+    },
+    "SH-ap-2-9": {
+      "brand": 62
+    },
+    "SH-ap-2-13": {
+      "brand": 18
+    },
+    "SH-hg-1-19": {
+      "brand": 20
+    },
+    "SH-hg-11-1-17": {
+      "brand": 45
+    },
+    "SH-hb-2-3-2": {
+      "brand": 25
+    },
+    "SH-hb-2-3-4": {
+      "brand": 5
+    }
+  },
+  "manufacturer_name_preserved": "AnOL OÜ",
+  "brand_value": "Decords",
+  "packaging_cm_kg": [
+    60,
+    6,
+    6,
+    0.5
+  ],
+  "barcodes_unchanged": true,
+  "supplier_codes_unchanged": true,
+  "product_count_unchanged": true,
+  "photo_urls_unchanged": true,
+  "category_mappings_unchanged": true,
+  "offers_sha256_unchanged": "4b5844f26da18224a87881544d9239f932ae6cfefafcfdb6d651c5190e22026f",
+  "historic_suspended_fi_missing_from_feed": [
+    "6012940535553",
+    "6012937279279",
+    "6012927578580",
+    "7341146629643",
+    "7341146630687"
+  ],
+  "limitations": [
+    "Exact PHH mandatory fields and accepted values for each category require the Categories fields and values file from PMP.",
+    "All package values were already set to 60x6x6cm and 0.5kg. Nonstandard articles require measured dimensions.",
+    "Not found EANs can only be created by PHH product content import; stock/price import does not create products.",
+    "Existing Hidden listings may require a content refresh/review by PHH support.",
+    "Not all Shopify active products are present in the feed. No EANs or new SKUs were invented."
+  ]
+}
